@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ class AdminLoginController extends Controller
 {
     public function index()
     {
-        return view('admin.login');
+        return view('admin.auth.login');
     }
 
     public function authenticate(Request $request)
