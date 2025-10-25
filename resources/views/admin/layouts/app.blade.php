@@ -50,7 +50,9 @@
 		<script src="{{ asset('admin-assets/js/global-helper.js') }}"></script>
 		<!--- Form helper --->
 		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
-        <!-- Adding csrf-token to any ajax request headers -->
+       <!--- Custom Alerts --->
+	   <script src="{{ asset('admin-assets/js/alerts.js') }}"></script>
+		<!-- Adding csrf-token to any ajax request headers -->
 		<script type="text/javascript">
 			$.ajaxSetup({
 				headers: {
