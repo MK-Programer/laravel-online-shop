@@ -30,6 +30,7 @@ $(document).ajaxError(function () {
     $('#page_loader').fadeOut(400);
 });
 
+// ✅ Convert text to slug
 function slugify(text) {
   return text
     .toString()                      // make sure it's a string
