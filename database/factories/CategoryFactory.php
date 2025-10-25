@@ -16,8 +16,12 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->unique()->name();
+        $slug = str()->slug($name);
         return [
-            //
+            'name' => $name,
+            'slug' => $slug,
+            'status' => fake()->boolean(),
         ];
     }
 }
