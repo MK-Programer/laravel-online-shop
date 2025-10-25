@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,16 @@ Route::prefix('admin')->group(function(){
     Route::middleware('admin.auth')->group(function(){
         Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('logout', [HomeController::class, 'logout'])->name('admin.logout');
+    
+        //* Categories Routes
+        Route::prefix('categories')->group(function(){
+            Route::get('/', [CategoryController::class, 'index'])->name('admin.categories.index');
+            Route::get('/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+            Route::post('/store', [CategoryController::class, 'store'])->name('admin.categories.store');
+            // Route::get('/{id}/edit', [CategoriesController::class, 'edit'])->name('admin.categories.edit');
+            // Route::put('/{id}/update', [CategoriesController::class, 'update'])->name('admin.categories.update');
+            // Route::delete('/{id}/delete', [CategoriesController::class, 'delete'])->name('admin.categories.delete');
+        });
     });
 });
 
