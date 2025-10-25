@@ -46,10 +46,10 @@
 		<script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{ asset('admin-assets/js/demo.js') }}"></script>
-		<!--- Form helper --->
-		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
 		<!--- Global helper --->
 		<script src="{{ asset('admin-assets/js/global-helper.js') }}"></script>
+		<!--- Form helper --->
+		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
         <!-- Adding csrf-token to any ajax request headers -->
 		<script type="text/javascript">
 			$.ajaxSetup({
