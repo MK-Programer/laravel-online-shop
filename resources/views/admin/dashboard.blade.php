@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.app', ['tab_name' => 'Dashboard'])
 
 @section('content')
     <!-- Content Header (Page header) -->

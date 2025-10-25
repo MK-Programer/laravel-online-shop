@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layouts.app', ['tab_name' => 'List Categories'])
 
 @section('content')
     <!-- Content Header (Page header) -->
