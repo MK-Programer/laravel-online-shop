@@ -9,7 +9,7 @@
                     <h1>Create Category</h1>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="categories.html" class="btn btn-primary">Back</a>
+                    <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>
@@ -19,6 +19,7 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
+            <div id="alert-container"></div>
             <form action="{{ route('admin.categories.store') }}" method="post" id="category_form" name="category_form">
                 <div class="card">
                     <div class="card-body">
@@ -51,7 +52,7 @@
                 </div>
                 <div class="pb-5 pt-3">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="#" class="btn btn-outline-dark ml-3">Cancel</a>
+                    <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
                 </div>
             </form>
         </div>
@@ -71,10 +72,12 @@
                 data: $(this).serializeArray(),
                 dataType: 'json',
                 beforeSend: function(){
+                    removeAlert();
                     hideValidationErrors('category_form');
                 },
                 success: function(response){
                     resetForm('category_form');
+                    showSuccess(response.message);
                 },
                 error: function(xhr, status, error){
                     if(xhr.status == 422)
@@ -83,7 +86,8 @@
                     }
                     else
                     {
-                        console.error('Something went wrong!');
+                        const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
+                        showError(message);
                     }
                 },
             });
