@@ -11,6 +11,7 @@
 		<!-- Theme style -->
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
 		<!-- Site wrapper -->
@@ -22,6 +23,15 @@
 			@include('admin.layouts.navs.sidebar')
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper">
+				<!-- Global Page Loader -->
+				<div id="page_loader"
+					style="position:fixed;top:0;left:0;width:100%;height:100%;
+							background:transparent;z-index:9999;
+							display:flex;justify-content:center;align-items:center;">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
                 @yield('content')
 			</div>
 			<!-- /.content-wrapper -->
@@ -36,6 +46,18 @@
 		<script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{ asset('admin-assets/js/demo.js') }}"></script>
-        @yield('customJs')
+		<!--- Form helper --->
+		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
+		<!--- Global helper --->
+		<script src="{{ asset('admin-assets/js/global-helper.js') }}"></script>
+        <!-- Adding csrf-token to any ajax request headers -->
+		<script type="text/javascript">
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+		</script>
+		@yield('js')
     </body>
 </html>
