@@ -1,6 +1,6 @@
 Dropzone.autoDiscover = false;
 
-$('.dropzone').each(function(index, element) {
+$('.dropzone').each(function (index, element) {
     const folder = $(element).data('folder') || 'others';
     const maxFiles = $(element).data('max-files') || 1;
     const inputName = $(element).data('name') || 'image_id';
@@ -12,13 +12,13 @@ $('.dropzone').each(function(index, element) {
         parallelUploads: maxFiles,
         maxFiles: maxFiles,
         addRemoveLinks: true,
-        acceptedFiles: "image/gif",
+        acceptedFiles: "image/png,image/jpg,image/jpeg,image/gif",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
 
-        init: function() {
-            this.on('addedfile', function(file) {
+        init: function () {
+            this.on('addedfile', function (file) {
                 if (this.files.length > maxFiles) {
                     this.removeFile(this.files[maxFiles - 1]);
                 }
@@ -29,12 +29,37 @@ $('.dropzone').each(function(index, element) {
                 dropzoneEl.next('.dropzone-error').remove();
             });
 
-            this.on('sending', function(file, xhr, formData) {
+            this.on('removedfile', function (file) {
+                // Try to get image_id from uploaded hidden input or response
+                const imageId = $(element).closest('form').find(`input[data-dz-image-id]`).val();
+
+                if (!imageId) return;
+
+                $.ajax({
+                    url: tempImageDeleteUrl, 
+                    type: 'DELETE',
+                    data: {
+                        image_id: imageId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        console.log('Image removed from temp:', response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error removing temp image:', error);
+                    }
+                });
+
+                // Also remove hidden input from form
+                $(element).closest('form').find(`input[data-dz-image-id="${imageId}"]`).remove();
+            });
+
+            this.on('sending', function (file, xhr, formData) {
                 formData.append('folder', folder);
             });
 
             // ✅ Handle successful uploads
-            this.on('success', function(file, response) {
+            this.on('success', function (file, response) {
                 const uploadedImagesIds = response.images_ids || [];
 
                 const $form = $(element).closest('form');
@@ -56,7 +81,7 @@ $('.dropzone').each(function(index, element) {
             });
 
             // ✅ Handle errors
-            this.on('error', function(file, errorMessage, xhr) {
+            this.on('error', function (file, errorMessage, xhr) {
                 const dropzoneEl = $(element);
 
                 // Remove any existing error messages
