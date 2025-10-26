@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="{{ asset('admin-assets/plugins/fontawesome-free/css/all.min.css') }}">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/adminlte.min.css') }}">
+		<!-- Dropzone style -->
+		<link rel="stylesheet" href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}">
+		<!-- Custom style -->
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 	</head>
@@ -45,6 +48,8 @@
 		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
        <!--- Custom Alerts --->
 	   <script src="{{ asset('admin-assets/js/alerts.js') }}"></script>
+	   <!-- Dropzone JS-->
+	   <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
 		<!-- Adding csrf-token to any ajax request headers -->
 		<script type="text/javascript">
 			$.ajaxSetup({
