@@ -40,16 +40,21 @@
 		<script src="{{ asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 		<!-- AdminLTE App -->
 		<script src="{{ asset('admin-assets/js/adminlte.min.js') }}"></script>
+		<!-- Dropzone JS-->
+	   <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
 		<!-- AdminLTE for demo purposes -->
 		<script src="{{ asset('admin-assets/js/demo.js') }}"></script>
 		<!--- Global helper --->
 		<script src="{{ asset('admin-assets/js/global-helper.js') }}"></script>
 		<!--- Form helper --->
 		<script src="{{ asset('admin-assets/js/form-helper.js') }}"></script>
+		<!--- Image helper --->
+		<script>
+			const tempImageUploadUrl = "{{ route('admin.temp-image-upload') }}";
+		</script>
+		<script src="{{ asset('admin-assets/js/image-helper.js') }}"></script>
        <!--- Custom Alerts --->
 	   <script src="{{ asset('admin-assets/js/alerts.js') }}"></script>
-	   <!-- Dropzone JS-->
-	   <script src="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.js') }}"></script>
 		<!-- Adding csrf-token to any ajax request headers -->
 		<script type="text/javascript">
 			$.ajaxSetup({

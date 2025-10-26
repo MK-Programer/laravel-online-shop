@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TempImagesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,9 @@ Route::prefix('admin')->group(function(){
             // Route::put('/{id}/update', [CategoriesController::class, 'update'])->name('admin.categories.update');
             // Route::delete('/{id}/delete', [CategoriesController::class, 'delete'])->name('admin.categories.delete');
         });
+
+        //* Temp Image Upload Route
+        Route::post('temp-image-upload', [TempImagesController::class, 'create'])->name('admin.temp-image-upload'); 
     });
 });
 

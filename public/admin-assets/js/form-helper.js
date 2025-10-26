@@ -3,6 +3,14 @@ function resetForm(formId) {
     const form = $('#'+formId);
     if (form.length) {
         form[0].reset();
+        // ✅ Remove Dropzone files *only* in this form
+        form.find('.dropzone').each(function(index, element) {
+            const dz = Dropzone.forElement(element);
+            if (dz) dz.removeAllFiles(true);
+        });
+
+        // ✅ Remove hidden image inputs only in this form
+        form.find('input[type="hidden"][data-dz-image-id]').remove();
         hideValidationErrors(formId);
     }
 }

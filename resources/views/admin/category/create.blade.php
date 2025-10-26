@@ -27,15 +27,27 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                    <input type="text" name="name" id="name" class="form-control"
+                                        placeholder="Name">
                                     <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="slug">Slug</label>
-                                    <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug" readonly>
+                                    <input type="text" name="slug" id="slug" class="form-control"
+                                        placeholder="Slug" readonly>
                                     <p></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="image">Image</label>
+                                    <div id="image" class="dropzone dz-clickable" data-folder="category">
+                                        <div class="dz-message needsclick">
+                                            <br>Drop files here or click to upload.<br><br>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -63,7 +75,7 @@
 
 @section('js')
     <script>
-        $('#category_form').submit(function(event){
+        $('#category_form').submit(function(event) {
             event.preventDefault();
 
             $.ajax({
@@ -71,21 +83,18 @@
                 type: $(this).attr('method'),
                 data: $(this).serializeArray(),
                 dataType: 'json',
-                beforeSend: function(){
+                beforeSend: function() {
                     removeAlert();
                     hideValidationErrors('category_form');
                 },
-                success: function(response){
+                success: function(response) {
                     resetForm('category_form');
                     showSuccess(response.message);
                 },
-                error: function(xhr, status, error){
-                    if(xhr.status == 422)
-                    {
+                error: function(xhr, status, error) {
+                    if (xhr.status == 422) {
                         showValidationErrors(xhr.responseJSON.errors);
-                    }
-                    else
-                    {
+                    } else {
                         const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
                         showError(message);
                     }
@@ -93,7 +102,7 @@
             });
         });
 
-        $('#name').change(function(){
+        $('#name').change(function() {
             let name = $(this).val();
             let slug = slugify(name);
             $('#slug').val(slug);
