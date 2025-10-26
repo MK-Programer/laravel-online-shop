@@ -43,6 +43,7 @@ Route::prefix('admin')->group(function(){
 
         //* Temp Image Upload Route
         Route::post('temp-image-upload', [TempImagesController::class, 'create'])->name('admin.temp-image-upload'); 
+        Route::delete('uri: temp-image-delete', [TempImagesController::class, 'delete'])->name('admin.temp-image-delete'); 
     });
 });
 

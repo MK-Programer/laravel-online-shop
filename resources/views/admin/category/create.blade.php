@@ -92,6 +92,7 @@
                     showSuccess(response.message);
                 },
                 error: function(xhr, status, error) {
+                    console.log(xhr);
                     if (xhr.status == 422) {
                         showValidationErrors(xhr.responseJSON.errors);
                     } else {

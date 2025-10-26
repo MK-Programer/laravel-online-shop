@@ -51,6 +51,7 @@
 		<!--- Image helper --->
 		<script>
 			const tempImageUploadUrl = "{{ route('admin.temp-image-upload') }}";
+			const tempImageDeleteUrl = "{{ route('admin.temp-image-delete') }}";
 		</script>
 		<script src="{{ asset('admin-assets/js/image-helper.js') }}"></script>
        <!--- Custom Alerts --->

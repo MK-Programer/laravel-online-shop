@@ -8,15 +8,20 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class CategoryController extends Controller
 {
     private $tempImagesController,
-        $imagesFolderPath = 'admin-uploads/category';
+        $imagesFolderPath,
+        $thumbFolderPath;
 
     public function __construct()
     {
         $this->tempImagesController = new TempImagesController();
+        $this->imagesFolderPath = 'admin-uploads/category';
+        $this->thumbFolderPath = $this->imagesFolderPath.'/thumb';
     }
 
     public function index(Request $request)
@@ -73,8 +78,21 @@ class CategoryController extends Controller
                 $dPath = public_path($this->imagesFolderPath.'/'.$newImageName);
                 File::copy($sPath, $dPath);
                 
+                
+                //* Generate Image Thumbnail
+
+                // create image manager with desired driver
+                $manager = new ImageManager(new Driver());
+
+                // read image from file system
+                $img = $manager->read($sPath);
+                $img->resize(450, 600);
+                $img->save($this->thumbFolderPath.'/'.$newImageName);
+
                 $category->image = $newImageName;
                 $category->save();
+
+                $this->tempImagesController->delete(new Request(['image_id' => $tempImage->id]));
             }
 
             return response()->json(['message' => 'Category added successfully.']);
