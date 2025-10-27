@@ -20,19 +20,19 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->tempImagesController = new TempImagesController();
-        $this->imagesFolderPath = 'admin-uploads/category';
-        $this->thumbFolderPath = $this->imagesFolderPath.'/thumb';
+        $this->imagesFolderPath = Category::imagesFolder();
+        $this->thumbFolderPath = Category::thumbFolder();
     }
 
     public function index(Request $request)
     {
-        $categories = Category::latest();
+        $categories = Category::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->orderByDesc('id')
+            ->paginate(10);
 
-        if ($request->has('search') && !empty($request->search)) {
-            $categories = $categories->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        $categories = $categories->paginate(10);
         return view('admin.category.list', compact('categories'));
     }
 
@@ -43,67 +43,83 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|unique:categories',
-                'slug' => 'required|unique:categories',
-            ]
-        );
-
-        if ($validator->passes()) {
-            $category = new Category();
-            $category->name = $request->name;
-            $category->slug = $request->slug;
-            $category->status = $request->status;
-            $category->save();
-
-            //* Save image
-            if (!empty($request->image_id)) 
-            {
-                $tempImage = TempImage::find($request->image_id);
-            
-                $info = pathinfo($tempImage->path);
-                // $folder = $info['dirname'];
-                // $imageName = $info['filename'];
-                $extension = $info['extension'];
-                
-                $newImageName = $category->id.'.'.$extension;
-                $sPath = public_path($this->tempImagesController->getTempFolderName().'/'.$tempImage->path);
-                $folderPath = public_path($this->imagesFolderPath);
-                if(!File::exists($this->imagesFolderPath))
-                {
-                    File::makeDirectory($folderPath, 0755, true);
-                }
-                $dPath = public_path($this->imagesFolderPath.'/'.$newImageName);
-                File::copy($sPath, $dPath);
-                
-                
-                //* Generate Image Thumbnail
-
-                // create image manager with desired driver
-                $manager = new ImageManager(new Driver());
-
-                // read image from file system
-                $img = $manager->read($sPath);
-                $img->resize(450, 600);
-                $img->save($this->thumbFolderPath.'/'.$newImageName);
-
-                $category->image = $newImageName;
-                $category->save();
-
-                $this->tempImagesController->delete(new Request(['image_id' => $tempImage->id]));
-            }
-
-            return response()->json(['message' => 'Category added successfully.']);
-        } else {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        return $this->saveCategory($request);
     }
 
-    public function edit() {}
+    private function saveCategory(Request $request, $record = null)
+    {
+        // 🧩 Common validation
+        $rules = [
+            'name' => 'required|unique:categories,name' . ($record ? ',' . $record : ''),
+            'slug' => 'required|unique:categories,slug' . ($record ? ',' . $record : ''),
+        ];
 
-    public function update() {}
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // 🧩 Create or update category
+        $category = $record ? Category::find($record) : new Category();
+        if ($record && !$category) {
+            return response()->json(['error' => 'Category not found.'], 404);
+        }
+
+        $category->fill([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'status' => $request->status,
+        ]);
+        $category->save();
+
+        // 🧩 Handle image if provided
+        if (!empty($request->image_id)) {
+            $this->handleCategoryImage($category, $request->image_id);
+        }
+
+        $message = $record ? 'Category updated successfully.' : 'Category added successfully.';
+        return response()->json(['message' => $message]);
+    }
+
+    private function handleCategoryImage(Category $category, $tempImageId)
+    {
+        $tempImage = TempImage::find($tempImageId);
+        if (!$tempImage) return;
+
+        $info = pathinfo($tempImage->path);
+        $extension = $info['extension'];
+        $newImageName = $category->id . '.' . $extension;
+
+        $tempPath = public_path($this->tempImagesController->getTempFolderName() . '/' . $tempImage->path);
+        $targetFolder = public_path($this->imagesFolderPath);
+        $thumbFolder = public_path($this->thumbFolderPath);
+
+        if (!File::exists($targetFolder)) {
+            File::makeDirectory($targetFolder, 0755, true);
+        }
+        if (!File::exists($thumbFolder)) {
+            File::makeDirectory($thumbFolder, 0755, true);
+        }
+
+        $destination = $targetFolder . '/' . $newImageName;
+        File::copy($tempPath, $destination);
+
+        // Generate thumbnail
+        $manager = new ImageManager(new Driver());
+        $img = $manager->read($tempPath);
+        // $img->resize(450, 600)->save($thumbFolder . '/' . $newImageName);
+        $img->contain(450, 600)->save($thumbFolder . '/' . $newImageName);
+
+        $category->image = $newImageName;
+        $category->save();
+
+        $this->tempImagesController->delete(new Request(['image_id' => $tempImageId]));
+    }
+
+    public function edit(){}
+
+    public function update(){}
 
     public function delete() {}
 }
