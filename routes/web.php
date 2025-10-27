@@ -38,7 +38,7 @@ Route::prefix('admin')->group(function(){
             Route::post('store', [CategoryController::class, 'store'])->name('admin.categories.store');
             Route::get('{record}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
             Route::put('{record}/update', [CategoryController::class, 'update'])->name('admin.categories.update');
-            // Route::delete('/{id}/delete', [CategoriesController::class, 'delete'])->name('admin.categories.delete');
+            Route::delete('{record}/delete', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
         });
 
         //* Temp Image Upload Route

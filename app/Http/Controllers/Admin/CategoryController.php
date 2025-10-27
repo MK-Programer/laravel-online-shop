@@ -149,5 +149,22 @@ class CategoryController extends Controller
         return $this->saveCategory($request, $record);
     }
 
-    public function delete() {}
+    public function destroy($record, Request $request)
+    {
+        $category = Category::find($record);
+        if(empty($category))
+        {
+            return redirect()
+                    ->route('admin.categories.index')
+                    ->with('error', 'Category not found.');
+        }
+
+        File::delete(Category::imagesFolder().'/'.$category->getRawOriginal('image'));
+        File::delete(Category::thumbFolder().'/'.$category->getRawOriginal('image'));
+        
+        $category->delete();
+        return redirect()
+                ->route('admin.categories.index')
+                ->with('success', 'Category deleted successfully.');
+    }
 }
