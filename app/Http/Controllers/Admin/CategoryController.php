@@ -48,6 +48,13 @@ class CategoryController extends Controller
 
     private function saveCategory(Request $request, $record = null)
     {
+        // 🧩 Create or update category
+        $category = $record ? Category::find($record) : new Category();
+        if ($record && !$category)
+        {
+            return response()->json(['error' => 'Category not found.'], 404);
+        }
+
         // 🧩 Common validation
         $rules = [
             'name' => 'required|unique:categories,name' . ($record ? ',' . $record : ''),
@@ -59,13 +66,6 @@ class CategoryController extends Controller
         if ($validator->fails())
         {
             return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        // 🧩 Create or update category
-        $category = $record ? Category::find($record) : new Category();
-        if ($record && !$category)
-        {
-            return response()->json(['error' => 'Category not found.'], 404);
         }
 
         $category->name = $request->name;
