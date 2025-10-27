@@ -56,25 +56,36 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+        {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
         // 🧩 Create or update category
         $category = $record ? Category::find($record) : new Category();
-        if ($record && !$category) {
+        if ($record && !$category)
+        {
             return response()->json(['error' => 'Category not found.'], 404);
         }
 
-        $category->fill([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'status' => $request->status,
-        ]);
+        $category->name = $request->name;
+        $category->slug = $request->slug;
+        $category->status = $request->status;
+        
+        if($record)
+        {
+            $category->updated_at = now();
+        }
+        else
+        {
+            $category->created_at = now();
+            $category->updated_at = now();
+        }
         $category->save();
 
         // 🧩 Handle image if provided
-        if (!empty($request->image_id)) {
+        if (!empty($request->image_id))
+        {
             $this->handleCategoryImage($category, $request->image_id);
         }
 
@@ -95,10 +106,12 @@ class CategoryController extends Controller
         $targetFolder = public_path($this->imagesFolderPath);
         $thumbFolder = public_path($this->thumbFolderPath);
 
-        if (!File::exists($targetFolder)) {
+        if (!File::exists($targetFolder))
+        {
             File::makeDirectory($targetFolder, 0755, true);
         }
-        if (!File::exists($thumbFolder)) {
+        if (!File::exists($thumbFolder))
+        {
             File::makeDirectory($thumbFolder, 0755, true);
         }
 
@@ -109,7 +122,9 @@ class CategoryController extends Controller
         $manager = new ImageManager(new Driver());
         $img = $manager->read($tempPath);
         // $img->resize(450, 600)->save($thumbFolder . '/' . $newImageName);
-        $img->contain(450, 600)->save($thumbFolder . '/' . $newImageName);
+        $img->scaleDown(450, 600)
+            ->cover(450, 600, 'center')
+            ->save($thumbFolder . '/' . $newImageName);
 
         $category->image = $newImageName;
         $category->save();
@@ -117,9 +132,22 @@ class CategoryController extends Controller
         $this->tempImagesController->delete(new Request(['image_id' => $tempImageId]));
     }
 
-    public function edit(){}
+    public function edit($record)
+    {
+        $category = Category::find($record);
+        if (empty($category)) {
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('error', 'Category not found.');
+        }
 
-    public function update(){}
+        return view('admin.category.edit', compact('category'));
+    }
+
+    public function update($record, Request $request)
+    {
+        return $this->saveCategory($request, $record);
+    }
 
     public function delete() {}
 }

@@ -34,16 +34,16 @@ Route::prefix('admin')->group(function(){
         //* Categories Routes
         Route::prefix('categories')->group(function(){
             Route::get('/', [CategoryController::class, 'index'])->name('admin.categories.index');
-            Route::get('/create', [CategoryController::class, 'create'])->name('admin.categories.create');
-            Route::post('/store', [CategoryController::class, 'store'])->name('admin.categories.store');
-            // Route::get('/{id}/edit', [CategoriesController::class, 'edit'])->name('admin.categories.edit');
-            // Route::put('/{id}/update', [CategoriesController::class, 'update'])->name('admin.categories.update');
+            Route::get('create', [CategoryController::class, 'create'])->name('admin.categories.create');
+            Route::post('store', [CategoryController::class, 'store'])->name('admin.categories.store');
+            Route::get('{record}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+            Route::put('{record}/update', [CategoryController::class, 'update'])->name('admin.categories.update');
             // Route::delete('/{id}/delete', [CategoriesController::class, 'delete'])->name('admin.categories.delete');
         });
 
         //* Temp Image Upload Route
         Route::post('temp-image-upload', [TempImagesController::class, 'create'])->name('admin.temp-image-upload'); 
-        Route::delete('uri: temp-image-delete', [TempImagesController::class, 'delete'])->name('admin.temp-image-delete'); 
+        Route::delete('temp-image-delete', [TempImagesController::class, 'delete'])->name('admin.temp-image-delete'); 
     });
 });
 
