@@ -20,9 +20,12 @@ function showValidationErrors(errors) {
     $.each(errors, function(field, message) {
         const input = $('#' + field);
         input.addClass('is-invalid');
-        input.siblings('p')
-            .addClass('invalid-feedback')
-            .text(message);
+        
+        // Remove any existing validation message
+        // input.next('.invalid-feedback').remove();
+
+        // Add new one dynamically
+        input.after('<p class="invalid-feedback">' + message + '</p>');
     });
 }
 
@@ -33,8 +36,7 @@ function hideValidationErrors(formId) {
         .each(function () {
             $(this)
                 .removeClass('is-invalid')
-                .siblings('p')
-                .removeClass('invalid-feedback')
-                .text('');
+                .next('.invalid-feedback')
+                .remove();
         });
 }
