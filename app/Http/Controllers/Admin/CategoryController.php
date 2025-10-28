@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Category;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -41,12 +43,12 @@ class CategoryController extends Controller
         return view('admin.category.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         return $this->saveCategory($request);
     }
 
-    private function saveCategory(Request $request, $record = null)
+    private function saveCategory(CategoryRequest $request, $record = null)
     {
         // 🧩 Create or update category
         $category = $record ? Category::find($record) : new Category();
@@ -55,32 +57,9 @@ class CategoryController extends Controller
             return response()->json(['error' => 'Category not found.'], 404);
         }
 
-        // 🧩 Common validation
-        $rules = [
-            'name' => 'required|unique:categories,name' . ($record ? ',' . $record : ''),
-            'slug' => 'required|unique:categories,slug' . ($record ? ',' . $record : ''),
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails())
-        {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->status = $request->status;
-        
-        if($record)
-        {
-            $category->updated_at = now();
-        }
-        else
-        {
-            $category->created_at = now();
-            $category->updated_at = now();
-        }
         $category->save();
 
         // 🧩 Handle image if provided
@@ -144,7 +123,7 @@ class CategoryController extends Controller
         return view('admin.category.edit', compact('category'));
     }
 
-    public function update($record, Request $request)
+    public function update($record, CategoryRequest $request)
     {
         return $this->saveCategory($request, $record);
     }
