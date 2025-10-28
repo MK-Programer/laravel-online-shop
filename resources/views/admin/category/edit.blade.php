@@ -29,7 +29,6 @@
                                     <label for="name">Name</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="Name" value="{{ $category->name }}">
-                                    <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -37,7 +36,6 @@
                                     <label for="slug">Slug</label>
                                     <input type="text" name="slug" id="slug" class="form-control"
                                         placeholder="Slug" value="{{ $category->slug }}" readonly>
-                                    <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
