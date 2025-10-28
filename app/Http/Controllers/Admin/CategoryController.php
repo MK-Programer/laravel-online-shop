@@ -137,8 +137,9 @@ class CategoryController extends Controller
                     ->with('error', 'Category not found.');
         }
 
-        File::delete(Category::imagesFolder().'/'.$category->getRawOriginal('image'));
-        File::delete(Category::thumbFolder().'/'.$category->getRawOriginal('image'));
+        $image = $category->getRawOriginal('image');
+        File::delete($this->imagesFolderPath.'/'.$image);
+        File::delete($this->thumbFolderPath.'/'.$image);
         
         $category->delete();
         return redirect()
