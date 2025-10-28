@@ -28,7 +28,8 @@ class CategoryController extends Controller
     {
         $categories = Category::query()
             ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
+                $search = $request->search;
+                $query->where('name', 'like', '%' . $search . '%');
             })
             ->orderByDesc('id')
             ->paginate(10);

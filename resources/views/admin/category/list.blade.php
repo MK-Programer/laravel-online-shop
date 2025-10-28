@@ -74,7 +74,6 @@
                                                 </path>
                                             </svg>
                                         @endif
-
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.categories.edit', ['record' => $category->id]) }}">
@@ -85,7 +84,7 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}"
+                                        <form action="{{ route('admin.categories.destroy', ['record' => $category->id]) }}"
                                             method="post" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
