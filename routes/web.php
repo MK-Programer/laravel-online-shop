@@ -44,6 +44,7 @@ Route::prefix('admin')->group(function(){
 
         //* Sub Category Routes
         Route::prefix('sub-categories')->group(function(){
+            Route::get('/', [SubCategoryController::class, 'index'])->name('admin.sub-categories.index');
             Route::get('create', [SubCategoryController::class, 'create'])->name('admin.sub-categories.create');
             Route::post('store', [SubCategoryController::class, 'store'])->name('admin.sub-categories.store');
         });

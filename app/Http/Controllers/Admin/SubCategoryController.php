@@ -10,6 +10,23 @@ use Illuminate\Http\Request;
 
 class SubCategoryController extends Controller
 {
+    public function index(Request $request)
+    {
+        $subCategories = SubCategory::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhereHas('category', function ($qry) use ($search) {
+                        $qry->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            ->with(['category'])
+            ->orderByDesc('id')
+            ->paginate(10);
+
+        return view('admin.sub-category.list', compact('subCategories'));
+    }
+
     public function create()
     {
         $categories = Category::orderBy('name')->pluck('name', 'id');
