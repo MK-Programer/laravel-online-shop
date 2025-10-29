@@ -64,8 +64,8 @@ class SubCategoryController extends Controller
         if(empty($subCategory))
         {
             return redirect()
-                    ->route('admin.sub-categories.index')
-                    ->with('error', 'Record not found.');
+                ->route('admin.sub-categories.index')
+                ->with('error', 'Record not found.');
         }
 
         $categories = Category::getCategoryNameIdPairs();
@@ -75,5 +75,21 @@ class SubCategoryController extends Controller
     public function update($record, SubCategoryRequest $request)
     {
         return $this->saveSubCategory($request, $record);
+    }
+
+    public function destroy($record, Request $request)
+    {
+        $subCategory = SubCategory::find($record);
+        if(empty($subCategory))
+        {
+            return redirect()
+                ->route('admin.sub-categories.index')
+                ->with('error', 'Record not found.');
+        }
+
+        $subCategory->delete();
+        return redirect()
+            ->route('admin.sub-categories.index')
+            ->with('success', 'Sub Category deleted successfully.');
     }
 }

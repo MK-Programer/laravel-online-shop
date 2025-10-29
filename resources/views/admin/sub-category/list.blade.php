@@ -86,7 +86,7 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="#"
+                                        <form action="{{ route('admin.sub-categories.destroy', ['record' => $subCategory->id]) }}"
                                             method="post" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')

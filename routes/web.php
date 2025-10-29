@@ -49,6 +49,7 @@ Route::prefix('admin')->group(function(){
             Route::post('store', [SubCategoryController::class, 'store'])->name('admin.sub-categories.store');
             Route::get('{record}/edit', [SubCategoryController::class, 'edit'])->name('admin.sub-categories.edit');
             Route::put('{record}/update', [SubCategoryController::class, 'update'])->name('admin.sub-categories.update');
+            Route::delete('{record}/delete', [SubCategoryController::class, 'destroy'])->name('admin.sub-categories.destroy');
         });
 
         //* Temp Image Upload Route
