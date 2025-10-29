@@ -15,28 +15,32 @@ function resetForm(formId) {
     }
 }
 
-// ✅ Show validation errors (expects Laravel-style error object)
+// ✅ Show validation errors (supports multiple messages per field)
 function showValidationErrors(errors) {
-    $.each(errors, function(field, message) {
+    $.each(errors, function(field, messages) {
         const input = $('#' + field);
         input.addClass('is-invalid');
         
-        // Remove any existing validation message
-        // input.next('.invalid-feedback').remove();
+        // Remove any previous feedback messages for this input
+        // input.nextAll('.invalid-feedback').remove();
 
-        // Add new one dynamically
-        input.after('<p class="invalid-feedback">' + message + '</p>');
+        // Ensure messages is always treated as an array
+        const messageArray = Array.isArray(messages) ? messages : [messages];
+
+        // Append all messages
+        const allMessages = messageArray.join('<br>');
+        input.after('<p class="invalid-feedback">' + allMessages + '</p>');
     });
 }
 
-// ✅ Hide all validation errors inside a form
+// ✅ Hide all validation errors inside a specific form
 function hideValidationErrors(formId) {
-    $('#'+formId)
+    $('#' + formId)
         .find('input, select, textarea')
         .each(function () {
             $(this)
                 .removeClass('is-invalid')
-                .next('.invalid-feedback')
+                .nextAll('.invalid-feedback') // remove all feedbacks (in case multiple exist)
                 .remove();
         });
 }
