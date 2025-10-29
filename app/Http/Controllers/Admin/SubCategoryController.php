@@ -29,19 +29,51 @@ class SubCategoryController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->pluck('name', 'id');
+        $categories = Category::getCategoryNameIdPairs();
         return view('admin.sub-category.create', compact('categories'));
     }
 
     public function store(SubCategoryRequest $request)
     {
-        $subCategory = new SubCategory();
+        return $this->saveSubCategory($request);
+    }
+
+    private function saveSubCategory(SubCategoryRequest $request, $record = null)
+    {
+        // 🧩 Create or update sub category
+        $subCategory = $record ? SubCategory::find($record) : new SubCategory();
+        if ($record && !$subCategory)
+        {
+            return response()->json(['error' => 'Record not found.'], 404);
+        }
+
         $subCategory->category_id = $request->category;
         $subCategory->name = $request->name;
         $subCategory->slug = $request->slug;
         $subCategory->status = $request->status;
         $subCategory->save();
 
-        return response()->json(['message' => 'Sub Category added successfully.']);
+        $message = $record ? 'Sub Category updated successfully.' : 'Sub Category added successfully.';
+
+        return response()->json(['message' => $message]);
+    }
+
+    public function edit($record)
+    {
+        $subCategory = SubCategory::find($record);
+        if(empty($subCategory))
+        {
+            return redirect()
+                    ->route('admin.sub-categories.index')
+                    ->with('error', 'Record not found.');
+        }
+
+        $categories = Category::getCategoryNameIdPairs();
+        return view('admin.sub-category.edit', compact('subCategory', 'categories'));
+    }
+
+    public function update($record, SubCategoryRequest $request)
+    {
+        return $this->saveSubCategory($request, $record);
     }
 }
