@@ -19,7 +19,6 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            <div id="alert-container"></div>
             <form action="{{ route('admin.sub-categories.store') }}" method="post" id="sub_category_form" name="sub_category_form">
                 <div class="card">
                     <div class="card-body">

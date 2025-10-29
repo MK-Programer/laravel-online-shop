@@ -19,7 +19,6 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            <div id="alert-container"></div>
             <form action="{{ route('admin.categories.update', ['record' => $category->id]) }}" method="put" id="category_form" name="category_form">
                 <div class="card">
                     <div class="card-body">
