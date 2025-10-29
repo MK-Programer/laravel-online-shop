@@ -36,4 +36,10 @@ class Category extends Model
         $value = $this->getRawOriginal('image');
         return $value ? url(self::thumbFolder() . '/' . $value) : null;
     }
+
+    public static function getCategoryNameIdPairs()
+    {
+        $categories = self::orderBy('name')->pluck('name', 'id');
+        return $categories;
+    }
 }
