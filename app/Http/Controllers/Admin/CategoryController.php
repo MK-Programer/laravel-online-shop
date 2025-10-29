@@ -53,7 +53,7 @@ class CategoryController extends Controller
         $category = $record ? Category::find($record) : new Category();
         if ($record && !$category)
         {
-            return response()->json(['error' => 'Category not found.'], 404);
+            return response()->json(['error' => 'Record not found.'], 404);
         }
 
         $category->name = $request->name;
@@ -116,7 +116,7 @@ class CategoryController extends Controller
         if (empty($category)) {
             return redirect()
                 ->route('admin.categories.index')
-                ->with('error', 'Category not found.');
+                ->with('error', 'Record not found.');
         }
 
         return view('admin.category.edit', compact('category'));
@@ -134,7 +134,7 @@ class CategoryController extends Controller
         {
             return redirect()
                     ->route('admin.categories.index')
-                    ->with('error', 'Category not found.');
+                    ->with('error', 'Record not found.');
         }
 
         $image = $category->getRawOriginal('image');
