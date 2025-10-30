@@ -14,4 +14,10 @@ class Brand extends Model
         'slug',
         'status',
     ];
+
+    public static function getNameIdPairs()
+    {
+        $brands = self::orderBy('name')->pluck('name', 'id');
+        return $brands;
+    }
 }

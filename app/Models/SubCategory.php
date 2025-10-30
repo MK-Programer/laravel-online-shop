@@ -20,4 +20,13 @@ class SubCategory extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public static function getNameIdPairs($categoryId)
+    {
+        $subCategories = self::when($categoryId, function($query, $categoryId){
+                                $query->where('category_id', $categoryId);
+                            })
+                            ->orderBy('name')->pluck('name', 'id');
+        return $subCategories;
+    }
 }

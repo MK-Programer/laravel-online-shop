@@ -37,7 +37,7 @@ class Category extends Model
         return $value ? url(self::thumbFolder() . '/' . $value) : null;
     }
 
-    public static function getCategoryNameIdPairs()
+    public static function getNameIdPairs()
     {
         $categories = self::orderBy('name')->pluck('name', 'id');
         return $categories;
