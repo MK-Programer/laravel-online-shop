@@ -24,8 +24,9 @@ class BrandRequest extends FormRequest
         $record = $this->route('record');
 
         return [
-            'name' => 'required|unique:brands,name' . ($record ? ',' . $record : ''),
-            'slug' => 'required|unique:brands,slug' . ($record ? ',' . $record : ''),
+            'name' => 'required|string|unique:brands,name' . ($record ? ',' . $record : ''),
+            'slug' => 'required|string|unique:brands,slug' . ($record ? ',' . $record : ''),
+            'status' => 'boolean',
         ];
     }
 }

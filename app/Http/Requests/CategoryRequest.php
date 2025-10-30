@@ -25,8 +25,9 @@ class CategoryRequest extends FormRequest
         $record = $this->route('record');
 
         return [
-            'name' => 'required|unique:categories,name' . ($record ? ',' . $record : ''),
-            'slug' => 'required|unique:categories,slug' . ($record ? ',' . $record : ''),
+            'name' => 'required|string|unique:categories,name' . ($record ? ',' . $record : ''),
+            'slug' => 'required|string|unique:categories,slug' . ($record ? ',' . $record : ''),
+            'status' => 'boolean',
         ];
     }
 }

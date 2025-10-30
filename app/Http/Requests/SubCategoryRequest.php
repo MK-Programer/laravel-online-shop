@@ -24,9 +24,10 @@ class SubCategoryRequest extends FormRequest
         $record = $this->route('record');
 
         return [
-            'category' => 'required|exists:categories,id',
-            'name' => 'required|unique:sub_categories,name' . ($record ? ',' . $record : ''),
-            'slug' => 'required|unique:sub_categories,slug' . ($record ? ',' . $record : ''),
+            'category' => 'required|integer|exists:categories,id',
+            'name' => 'required|string|unique:sub_categories,name' . ($record ? ',' . $record : ''),
+            'slug' => 'required|string|unique:sub_categories,slug' . ($record ? ',' . $record : ''),
+            'status' => 'boolean',
         ];
     }
 }
