@@ -73,38 +73,8 @@
 
 @section('js')
     <script>
-        $('#sub_category_form').submit(function(event) {
-            event.preventDefault();
+        submitFormUsingAjax('sub_category_form', false);
 
-            $.ajax({
-                url: $(this).attr('action'),
-                type: $(this).attr('method'),
-                data: $(this).serializeArray(),
-                dataType: 'json',
-                beforeSend: function() {
-                    removeAlert();
-                    hideValidationErrors('sub_category_form');
-                },
-                success: function(response) {
-                    resetForm('sub_category_form');
-                    showSuccess(response.message);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr);
-                    if (xhr.status == 422) {
-                        showValidationErrors(xhr.responseJSON.errors);
-                    } else {
-                        const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
-                        showError(message);
-                    }
-                },
-            });
-        });
-
-        $('#name').change(function() {
-            let name = $(this).val();
-            let slug = slugify(name);
-            $('#slug').val(slug);
-        });
+        addSlugifyEvent('name', 'slug');
     </script>
 @endsection
