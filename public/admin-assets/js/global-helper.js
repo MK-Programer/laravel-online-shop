@@ -53,3 +53,11 @@ function slugify(text) {
     .replace(/\s+/g, '-')            // replace spaces with hyphens
     .replace(/-+/g, '-');            // collapse multiple hyphens
 }
+
+function addSlugifyEvent(sourceId, destinationId){
+    $('#'+sourceId).change(function() {
+        let name = $(this).val();
+        let slug = slugify(name);
+        $('#'+destinationId).val(slug);
+    });
+}
