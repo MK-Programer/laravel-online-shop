@@ -16,6 +16,17 @@ $(document).on('submit', 'form', function () {
     $('#page_loader').fadeIn(200);
 });
 
+// ✅ Handle back/forward navigation (bfcache restore)
+$(window).on('pageshow', function (event) {
+    // If the page was restored from bfcache, hide the loader
+    if (event.originalEvent.persisted) {
+        $('#page_loader').fadeOut(0);
+    } else {
+        // Also ensure it's hidden just in case
+        $('#page_loader').fadeOut(0);
+    }
+});
+
 // ✅ Show loader when any AJAX request starts
 $(document).ajaxStart(function () {
     $('#page_loader').fadeIn(200);
