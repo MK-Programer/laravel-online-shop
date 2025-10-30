@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TempImagesController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,17 @@ Route::prefix('admin')->group(function(){
             Route::put('{record}/update', [SubCategoryController::class, 'update'])->name('admin.sub-categories.update');
             Route::delete('{record}/delete', [SubCategoryController::class, 'destroy'])->name('admin.sub-categories.destroy');
         });
+
+        //* Brand Routes
+        Route::prefix('brands')->group(function(){
+            Route::get('/', [BrandController::class, 'index'])->name('admin.brands.index');
+            Route::get('create', [BrandController::class, 'create'])->name('admin.brands.create');
+            Route::post('store', [BrandController::class, 'store'])->name('admin.brands.store');
+            Route::get('{record}/edit', [BrandController::class, 'edit'])->name('admin.brands.edit');
+            Route::put('{record}/update', [BrandController::class, 'update'])->name('admin.brands.update');
+            Route::delete('{record}/delete', [BrandController::class, 'destroy'])->name('admin.brands.destroy');
+        });
+
 
         //* Temp Image Upload Route
         Route::post('temp-image-upload', [TempImagesController::class, 'create'])->name('admin.temp-image-upload'); 
