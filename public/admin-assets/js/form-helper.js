@@ -3,6 +3,8 @@ function resetForm(formId) {
     const form = $('#' + formId);
     if (form.length) {
         form[0].reset();
+        $('.summernote').summernote('code', '');
+
         // ✅ Remove Dropzone files *only* in this form
         form.find('.dropzone').each(function (index, element) {
             const dz = Dropzone.forElement(element);
