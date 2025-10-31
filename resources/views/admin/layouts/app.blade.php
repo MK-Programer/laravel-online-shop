@@ -14,6 +14,9 @@
 		<link rel="stylesheet" href="{{ asset('admin-assets/plugins/dropzone/min/dropzone.min.css') }}">
 		<!-- Custom style -->
 		<link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css') }}">
+		<!--- Summernote Style --->
+		<link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote.min.css') }}">
+
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
@@ -54,14 +57,23 @@
 			const tempImageDeleteUrl = "{{ route('admin.temp-image-delete') }}";
 		</script>
 		<script src="{{ asset('admin-assets/js/image-helper.js') }}"></script>
-       <!--- Custom Alerts --->
+       	<!--- Summernote JS --->
+	   <script src="{{ asset('admin-assets/plugins/summernote/summernote.min.js') }}"></script>
+		<!--- Custom Alerts --->
 	   <script src="{{ asset('admin-assets/js/alerts.js') }}"></script>
-		<!-- Adding csrf-token to any ajax request headers -->
+		<!--- Custom JS --->
 		<script type="text/javascript">
+			// Adding csrf-token to any ajax request headers
 			$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
+			});
+
+			$(document).ready(function(){
+				$('.summernote').summernote({
+					height: 250
+				});
 			});
 		</script>
 		@yield('js')
