@@ -29,7 +29,7 @@ class SubCategoryController extends Controller
 
     public function create()
     {
-        $categories = Category::getCategoryNameIdPairs();
+        $categories = Category::getNameIdPairs();
         return view('admin.sub-category.create', compact('categories'));
     }
 
@@ -68,7 +68,7 @@ class SubCategoryController extends Controller
                 ->with('error', 'Record not found.');
         }
 
-        $categories = Category::getCategoryNameIdPairs();
+        $categories = Category::getNameIdPairs();
         return view('admin.sub-category.edit', compact('subCategory', 'categories'));
     }
 
