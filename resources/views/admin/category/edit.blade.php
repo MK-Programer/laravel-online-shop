@@ -43,7 +43,7 @@
                                     <label for="image">Image</label>
                                     <div id="image" 
                                         class="dropzone dz-clickable"
-                                        sdata-folder="category"
+                                        data-folder="category"
                                         data-existing-images="{{ $category->getThumb() }}"
                                         data-existing-names="{{ $category->image }}">
                                         <div class="dz-message needsclick">
