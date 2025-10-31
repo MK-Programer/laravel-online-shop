@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\TempImage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -60,6 +61,13 @@ class CategoryController extends Controller
         $category->slug = $request->slug;
         $category->status = $request->status;
         $category->save();
+
+        // Handle image removal
+        if ($request->has('remove_existing_image')) {
+            $this->deleteRecordImages($category);
+            $category->image = null;
+            $category->save();
+        }
 
         // 🧩 Handle image if provided
         if (!empty($request->image_id))
@@ -127,6 +135,15 @@ class CategoryController extends Controller
         return $this->saveCategory($request, $record);
     }
 
+    private function deleteRecordImages($category)
+    {
+        $image = $category->getRawOriginal('image');
+        if ($category->image && File::exists($this->imagesFolderPath.'/'.$image)) {
+            File::delete($this->imagesFolderPath.'/'.$image);
+            File::delete($this->thumbFolderPath.'/'.$image);
+        }
+    }
+
     public function destroy($record, Request $request)
     {
         $category = Category::find($record);
@@ -137,11 +154,9 @@ class CategoryController extends Controller
                     ->with('error', 'Record not found.');
         }
 
-        $image = $category->getRawOriginal('image');
-        File::delete($this->imagesFolderPath.'/'.$image);
-        File::delete($this->thumbFolderPath.'/'.$image);
-        
+        $this->deleteRecordImages($category);
         $category->delete();
+
         return redirect()
             ->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');
