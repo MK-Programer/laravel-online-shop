@@ -19,7 +19,8 @@
     <section class="content">
         <!-- Default box -->
         <div class="container-fluid">
-            <form action="{{ route('admin.categories.update', ['record' => $category->id]) }}" method="put" id="category_form" name="category_form">
+            <form action="{{ route('admin.categories.update', ['record' => $category->id]) }}" method="put"
+                id="category_form" name="category_form">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -40,24 +41,31 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="image">Image</label>
-                                    <div id="image" class="dropzone dz-clickable" data-folder="category">
+                                    <div id="image" 
+                                        class="dropzone dz-clickable"
+                                        sdata-folder="category"
+                                        data-existing-images="{{ $category->getThumb() }}"
+                                        data-existing-names="{{ $category->image }}">
                                         <div class="dz-message needsclick">
                                             <br>Drop files here or click to upload.<br><br>
                                         </div>
                                     </div>
+
                                 </div>
-                                @if (!empty($category->image))
+                                {{-- @if (!empty($category->image))
                                     <div>
                                         <img src="{{ $category->getThumb() }}" alt="" width="100" height="100" class="{{ !empty($category->image) ? 'd-block' : 'd-none' }}">
                                     </div>
-                                @endif 
+                                @endif  --}}
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1" {{ $category->status == 1 ? 'selected' : '' }}>Active</option>
-                                        <option value="0" {{ $category->status == 0 ? 'selected' : '' }}>Blocked</option>
+                                        <option value="1" {{ $category->status == 1 ? 'selected' : '' }}>Active
+                                        </option>
+                                        <option value="0" {{ $category->status == 0 ? 'selected' : '' }}>Blocked
+                                        </option>
                                     </select>
                                 </div>
                             </div>
