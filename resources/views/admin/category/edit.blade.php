@@ -45,18 +45,13 @@
                                         class="dropzone dz-clickable"
                                         data-folder="category"
                                         data-existing-images="{{ $category->getThumb() }}"
-                                        data-existing-names="{{ $category->image }}">
+                                        data-existing-names="{{ $category->id }}">
                                         <div class="dz-message needsclick">
                                             <br>Drop files here or click to upload.<br><br>
                                         </div>
                                     </div>
 
                                 </div>
-                                {{-- @if (!empty($category->image))
-                                    <div>
-                                        <img src="{{ $category->getThumb() }}" alt="" width="100" height="100" class="{{ !empty($category->image) ? 'd-block' : 'd-none' }}">
-                                    </div>
-                                @endif  --}}
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">

@@ -40,7 +40,9 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="image">Image</label>
-                                    <div id="image" class="dropzone dz-clickable" data-folder="category">
+                                    <div id="image" 
+                                        class="dropzone dz-clickable"
+                                        data-folder="category">
                                         <div class="dz-message needsclick">
                                             <br>Drop files here or click to upload.<br><br>
                                         </div>
