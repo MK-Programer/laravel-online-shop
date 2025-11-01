@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\TempImage;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class CategoryController extends Controller
 {

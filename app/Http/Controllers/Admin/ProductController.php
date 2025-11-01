@@ -23,14 +23,15 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->tempImagesController = new TempImagesController();
-        $this->imagesFolderPath = Product::imagesFolderPath();
-        $this->thumbFolderPath = Product::thumbFolderPath();
+        $this->imagesFolderPath = ProductImage::imagesFolderPath();
+        $this->thumbFolderPath = ProductImage::thumbFolderPath();
     }
 
     public function create()
     {
         $categories = Category::getNameIdPairs();
         $brands = Brand::getNameIdPairs();
+
         return view('admin.products.create', compact('categories', 'brands'));
     }
 
@@ -53,14 +54,7 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->save();
 
-        // Handle image removal
-        // if ($request->has('remove_existing_image')) {
-        //     $this->deleteRecordImages($category);
-        //     $category->image = null;
-        //     $category->save();
-        // }
-
-        // 🧩 Handle image if provided
+        // 🧩 Handle product images
         if (!empty($request->images_id)) {
             $this->saveProductImages($product->id, $request->images_id, $request->images_order);
         }
@@ -70,52 +64,53 @@ class ProductController extends Controller
 
     private function saveProductImages($productId, $tempImagesId, $tempImagesOrder)
     {
-        $tempImagesOrder = array_values($tempImagesOrder);
         $imageManager = new ImageManager(new Driver());
+        $tempImagesOrder = array_values($tempImagesOrder);
 
-        for ($i = 0; $i < count($tempImagesId); $i++)
-        {
-            $tempImageId = $tempImagesId[$i];
-            $tempImageOrder = $tempImagesOrder[$i];
-
+        foreach ($tempImagesId as $i => $tempImageId) {
             $tempImage = TempImage::find($tempImageId);
             if (!$tempImage) {
                 continue;
             }
 
+            $order = $tempImagesOrder[$i];
+
+            // Create record first
             $productImage = new ProductImage();
             $productImage->product_id = $productId;
-            $productImage->image = 'NULL';
-            $productImage->sort_order = $tempImageOrder;
+            $productImage->sort_order = $order;
+            $productImage->image = null;
             $productImage->save();
 
+            // Prepare paths
             $tempImagePath = $this->tempImagesController->getTempImagePath($tempImage);
             $tempThumbPath = $this->tempImagesController->getTempThumbPath($tempImage);
-
             $extension = pathinfo($tempImage->image_name, PATHINFO_EXTENSION);
             $newFileName = "{$productId}-{$productImage->id}-" . time() . ".{$extension}";
 
+            // Update filename in DB
             $productImage->image = $newFileName;
             $productImage->save();
 
-            // Large Image
-            File::ensureDirectoryExists($this->imagesFolderPath . '/large', 0755, true);
-            $largeDestinationPath = "{$this->imagesFolderPath}/large/{$newFileName}";
-            $image = $imageManager->read($tempImagePath);
-            $image->scale(width: 1400)
-                ->save($largeDestinationPath);
+            // Large image (scaled)
+            File::ensureDirectoryExists("{$this->imagesFolderPath}/large", 0755, true);
+            $largeDestination = "{$this->imagesFolderPath}/large/{$newFileName}";
+            $imageManager->read($tempImagePath)
+                ->scale(width: 1400)
+                ->save($largeDestination);
 
-            // Small Image
-            File::ensureDirectoryExists($this->imagesFolderPath . '/small', 0755, true);
-            $smallDestinationPath = "{$this->imagesFolderPath}/small/{$newFileName}";
-            $image = $imageManager->read($tempImagePath);
-            $image->cover(300, 300, 'center')
-                ->save($smallDestinationPath);
+            // Small image (square cropped)
+            File::ensureDirectoryExists("{$this->imagesFolderPath}/small", 0755, true);
+            $smallDestination = "{$this->imagesFolderPath}/small/{$newFileName}";
+            $imageManager->read($tempImagePath)
+                ->cover(300, 300, 'center')
+                ->save($smallDestination);
 
+            // Thumbnail
             File::ensureDirectoryExists($this->thumbFolderPath, 0755, true);
-
             File::copy($tempThumbPath, "{$this->thumbFolderPath}/{$newFileName}");
-            
+
+            // Delete from temp
             $this->tempImagesController->delete(new Request(['images_id' => [$tempImageId]]));
         }
     }
