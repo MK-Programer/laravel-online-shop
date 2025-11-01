@@ -36,6 +36,8 @@ class ProductRequest extends FormRequest
             'track_qty' => 'required|in:Yes,No',
             'qty' => 'required_if:track_qty,Yes|integer|nullable',
             'status' => 'required|boolean',
+            'images_order' => 'required|array|min:1',
+            'images_order.*' => 'required|integer|min:1|distinct',
         ];
     }
 }
