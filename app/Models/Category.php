@@ -44,7 +44,7 @@ class Category extends Model
     public function getThumb()
     {
         $value = $this->getRawOriginal('image');
-        return $value ? url(self::imagesFolderLocation() . '/' . $value) : null;
+        return $value ? url(self::thumbFolderLocation() . '/' . $value) : null;
     }
 
     public static function getNameIdPairs()
