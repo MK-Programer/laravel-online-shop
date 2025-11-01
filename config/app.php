@@ -65,6 +65,8 @@ return [
     'default_max_files' => 1,
     'products_max_files' => 10,
 
+    'default_thumb' => 'admin-assets/img/default-150x150.png',
+
 
     /*
     |--------------------------------------------------------------------------
