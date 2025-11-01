@@ -15,4 +15,24 @@ class ProductImage extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public static function imagesFolderLocation()
+    {
+        return config('app.admin_uploads_folder') . '/product';
+    }
+
+    public static function imagesFolderPath()
+    {
+        return public_path(self::imagesFolderLocation());
+    }
+
+    public static function thumbFolderLocation()
+    {
+        return self::imagesFolderLocation() . '/thumb';
+    }
+
+    public static function thumbFolderPath()
+    {
+        return public_path(self::thumbFolderLocation());
+    }
 }
