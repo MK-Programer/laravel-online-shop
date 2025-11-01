@@ -16,11 +16,10 @@ class BrandFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->unique()->name();
-        $slug = str()->slug($name);
+        $name = fake()->unique()->words(3, true);
         return [
             'name' => $name,
-            'slug' => $slug,
+            'slug' => str()->slug($name),
             'status' => fake()->boolean(),
         ];
     }

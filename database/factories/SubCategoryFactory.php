@@ -18,12 +18,11 @@ class SubCategoryFactory extends Factory
     public function definition(): array
     {
         $categoriesIds = Category::pluck('id')->toArray();
-        $name = fake()->unique()->name();
-        $slug = str()->slug($name);
+        $name = fake()->unique()->words(3, true);
         return [
             'category_id' => $categoriesIds[array_rand($categoriesIds)],
             'name' => $name,
-            'slug' => $slug,
+            'slug' => str()->slug($name),
             'status' => fake()->boolean(),
         ];
     }
