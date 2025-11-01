@@ -61,6 +61,10 @@ return [
 
     'admin_temp_folder' => 'admin-temp',
     'admin_uploads_folder' => 'admin-uploads',
+    
+    'default_max_files' => 1,
+    'products_max_files' => 10,
+
 
     /*
     |--------------------------------------------------------------------------
