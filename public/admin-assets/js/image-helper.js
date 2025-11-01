@@ -68,7 +68,7 @@ function initDropzone(element) {
     const $el = $(element);
     const folder = $el.data('folder') || 'others';
     const maxFiles = parseInt($el.data('max-files') || defaultMaxFiles);
-    const inputName = $el.data('name') || 'image_id';
+    const inputName = $el.data('name') || 'images_id';
 
     const dz = new Dropzone(element, {
         url: tempImageUploadUrl,
