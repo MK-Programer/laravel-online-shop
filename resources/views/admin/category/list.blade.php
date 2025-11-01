@@ -21,7 +21,7 @@
         <div class="container-fluid">
             @include('partials.flash')
             <div class="card">
-                <form action="" method="get">
+                <form action="{{ route('admin.categories.index') }}" method="get">
                     <div class="card-header">
                         <div class="card-title">
                             <a href="{{ route('admin.categories.index') }}" class="btn btn-default btn-sm">Reset</a>
