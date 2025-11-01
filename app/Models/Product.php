@@ -11,6 +11,16 @@ class Product extends Model
 
     protected $guarded = [];
 
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = ucfirst($value);
+    }
+
+    public function setSkuAttribute($value)
+    {
+        $this->attributes['sku'] = strtoupper($value);
+    }
+
     public function images()
     {
         return $this->hasMany(ProductImage::class);
