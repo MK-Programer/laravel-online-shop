@@ -55,6 +55,7 @@
 		<script>
 			const tempImageUploadUrl = "{{ route('admin.temp-image-upload') }}";
 			const tempImageDeleteUrl = "{{ route('admin.temp-image-delete') }}";
+			const defaultMaxFiles = "{{ config('app.default_max_files') }}";
 		</script>
 		<script src="{{ asset('admin-assets/js/image-helper.js') }}"></script>
        	<!--- Summernote JS --->
