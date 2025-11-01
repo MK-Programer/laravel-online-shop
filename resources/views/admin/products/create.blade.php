@@ -52,7 +52,11 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Media</h2>
-                                <div id="image" class="dropzone dz-clickable" data-folder="product" data-max-files="3">
+                                <div id="image"
+                                    class="dropzone dz-clickable"
+                                    data-folder="product"
+                                    data-max-files="{{ config('app.products_max_files') }}"
+                                    data-name="images_id">
                                     <div class="dz-message needsclick">
                                         <br>Drop files here or click to upload.<br><br>
                                     </div>
