@@ -68,6 +68,7 @@ Route::prefix('admin')->group(function(){
 
         //* Product Routes
         Route::prefix('products')->group(function(){
+            Route::get('/', [ProductController::class, 'index'])->name('admin.products.index');
             Route::get('create', [ProductController::class, 'create'])->name('admin.products.create');
             Route::post('store', [ProductController::class, 'store'])->name('admin.products.store');
         }); 

@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="products.html" class="nav-link">
+                    <a href="{{ route('admin.products.index') }}" class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tag"></i>
                         <p>Products</p>
                     </a>

@@ -27,6 +27,20 @@ class ProductController extends Controller
         $this->thumbFolderPath = ProductImage::thumbFolderPath();
     }
 
+    public function index(Request $request)
+    {
+        $products = Product::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
+                $query->where('title', 'like', '%' . $search . '%');
+            })
+            ->with(['images'])
+            ->orderByDesc('id')
+            ->paginate(10);
+            
+        return view('admin.products.list', compact('products'));
+    }
+
     public function create()
     {
         $categories = Category::getNameIdPairs();
