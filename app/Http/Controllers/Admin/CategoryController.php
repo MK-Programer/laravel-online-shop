@@ -7,7 +7,6 @@ use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\TempImage;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -21,8 +20,8 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->tempImagesController = new TempImagesController();
-        $this->imagesFolderPath = Category::imagesFolder();
-        $this->thumbFolderPath = Category::thumbFolder();
+        $this->imagesFolderPath = Category::imagesFolderPath();
+        $this->thumbFolderPath = Category::thumbFolderPath();
     }
 
     public function index(Request $request)
@@ -52,8 +51,7 @@ class CategoryController extends Controller
     {
         // 🧩 Create or update category
         $category = $record ? Category::find($record) : new Category();
-        if ($record && !$category)
-        {
+        if ($record && !$category) {
             return response()->json(['error' => 'Record not found.'], 404);
         }
 
@@ -70,9 +68,8 @@ class CategoryController extends Controller
         }
 
         // 🧩 Handle image if provided
-        if (!empty($request->image_id))
-        {
-            $this->handleCategoryImage($category, $request->image_id);
+        if (!empty($request->images_id)) {
+            $this->handleCategoryImage($category, $request->images_id);
         }
 
         $message = $record ? 'Category updated successfully.' : 'Category added successfully.';
@@ -82,40 +79,30 @@ class CategoryController extends Controller
     private function handleCategoryImage(Category $category, $tempImageId)
     {
         $tempImage = TempImage::find($tempImageId);
-        if (!$tempImage) return;
-
-        $info = pathinfo($tempImage->path);
-        $extension = $info['extension'];
-        $newImageName = $category->id . '.' . $extension;
-
-        $tempPath = public_path($this->tempImagesController->getTempFolderName() . '/' . $tempImage->path);
-        $targetFolder = public_path($this->imagesFolderPath);
-        $thumbFolder = public_path($this->thumbFolderPath);
-
-        if (!File::exists($targetFolder))
-        {
-            File::makeDirectory($targetFolder, 0755, true);
-        }
-        if (!File::exists($thumbFolder))
-        {
-            File::makeDirectory($thumbFolder, 0755, true);
+        if (!$tempImage) {
+            return;
         }
 
-        $destination = $targetFolder . '/' . $newImageName;
-        File::copy($tempPath, $destination);
+        $tempImagePath = $this->tempImagesController->getTempImagePath($tempImage);
+        $tempThumbPath = $this->tempImagesController->getTempThumbPath($tempImage);
 
-        // Generate thumbnail
-        $manager = new ImageManager(new Driver());
-        $img = $manager->read($tempPath);
-        // $img->resize(450, 600)->save($thumbFolder . '/' . $newImageName);
-        $img->scaleDown(450, 600)
-            ->cover(450, 600, 'center')
-            ->save($thumbFolder . '/' . $newImageName);
+        $extension = pathinfo($tempImage->image_name, PATHINFO_EXTENSION);
+        $newFileName = "{$category->id}.{$extension}";
 
-        $category->image = $newImageName;
+        File::ensureDirectoryExists($this->imagesFolderPath, 0755, true);
+
+        // Copy main image
+        $destinationPath = "{$this->imagesFolderPath}/{$newFileName}";
+        File::copy($tempImagePath, $destinationPath);
+
+        File::ensureDirectoryExists($this->thumbFolderPath, 0755, true);
+
+        File::copy($tempThumbPath, "{$this->thumbFolderPath}/{$newFileName}");
+
+        $category->image = $newFileName;
         $category->save();
 
-        $this->tempImagesController->delete(new Request(['image_id' => $tempImageId]));
+        $this->tempImagesController->delete(new Request(['images_id' => [$tempImageId]]));
     }
 
     public function edit($record)
@@ -138,20 +125,19 @@ class CategoryController extends Controller
     private function deleteRecordImages($category)
     {
         $image = $category->getRawOriginal('image');
-        if ($category->image && File::exists($this->imagesFolderPath.'/'.$image)) {
-            File::delete($this->imagesFolderPath.'/'.$image);
-            File::delete($this->thumbFolderPath.'/'.$image);
+        if ($category->image && File::exists($this->imagesFolderPath . '/' . $image)) {
+            File::delete($this->imagesFolderPath . '/' . $image);
+            File::delete($this->thumbFolderPath . '/' . $image);
         }
     }
 
     public function destroy($record, Request $request)
     {
         $category = Category::find($record);
-        if(empty($category))
-        {
+        if (empty($category)) {
             return redirect()
-                    ->route('admin.categories.index')
-                    ->with('error', 'Record not found.');
+                ->route('admin.categories.index')
+                ->with('error', 'Record not found.');
         }
 
         $this->deleteRecordImages($category);
