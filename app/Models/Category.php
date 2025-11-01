@@ -16,25 +16,35 @@ class Category extends Model
         'status',
     ];
 
-    public static function imagesFolder()
+    public static function imagesFolderLocation()
     {
         return config('app.admin_uploads_folder') . '/category';
     }
 
-    public static function thumbFolder()
+    public static function imagesFolderPath()
     {
-        return self::imagesFolder() . '/thumb';
+        return public_path(self::imagesFolderLocation());
+    }
+
+    public static function thumbFolderLocation()
+    {
+        return self::imagesFolderLocation() . '/thumb';
+    }
+
+    public static function thumbFolderPath()
+    {
+        return public_path(self::thumbFolderLocation());
     }
 
     public function getImageAttribute($value)
     {
-        return $value ? url(self::imagesFolder() . '/' . $value) : null;
+        return $value ? url(self::imagesFolderLocation() . '/' . $value) : null;
     }
 
     public function getThumb()
     {
         $value = $this->getRawOriginal('image');
-        return $value ? url(self::thumbFolder() . '/' . $value) : null;
+        return $value ? url(self::imagesFolderLocation() . '/' . $value) : null;
     }
 
     public static function getNameIdPairs()
