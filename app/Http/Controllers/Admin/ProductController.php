@@ -93,7 +93,7 @@ class ProductController extends Controller
             $productImage = new ProductImage();
             $productImage->product_id = $productId;
             $productImage->sort_order = $order;
-            $productImage->image = null;
+            $productImage->image = 'NULL';
             $productImage->save();
 
             // Prepare paths
