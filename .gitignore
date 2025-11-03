@@ -5,6 +5,7 @@
 /public/storage
 /public/admin-temp/
 /public/admin-uploads/
+/public/ignore-temp/
 /storage/*.key
 /vendor
 .env
