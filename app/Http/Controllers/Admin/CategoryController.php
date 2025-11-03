@@ -60,21 +60,21 @@ class CategoryController extends Controller
 
         // Handle image removal
         if ($request->has('remove_existing_image')) {
-            $this->deleteRecordImages($category);
+            $this->deleteRecordImage($category);
             $category->image = null;
             $category->save();
         }
 
         // 🧩 Handle image if provided
         if (!empty($request->images_id)) {
-            $this->handleCategoryImage($category, $request->images_id);
+            $this->saveCategoryImage($category, $request->images_id);
         }
 
         $message = $record ? 'Category updated successfully.' : 'Category added successfully.';
         return response()->json(['message' => $message]);
     }
 
-    private function handleCategoryImage(Category $category, $tempImageId)
+    private function saveCategoryImage(Category $category, $tempImageId)
     {
         $tempImage = TempImage::find($tempImageId);
         if (!$tempImage) {
@@ -120,12 +120,15 @@ class CategoryController extends Controller
         return $this->saveCategory($request, $record);
     }
 
-    private function deleteRecordImages($category)
+    private function deleteRecordImage($category)
     {
         $image = $category->getRawOriginal('image');
-        if ($category->image && File::exists($this->imagesFolderPath . '/' . $image)) {
-            File::delete($this->imagesFolderPath . '/' . $image);
-            File::delete($this->thumbFolderPath . '/' . $image);
+        if ($category->image) {
+            if(File::exists($this->imagesFolderPath . '/' . $image))
+                File::delete($this->imagesFolderPath . '/' . $image);
+
+            if(File::exists($this->thumbFolderPath . '/' . $image))
+                File::delete($this->thumbFolderPath . '/' . $image);
         }
     }
 
@@ -138,7 +141,7 @@ class CategoryController extends Controller
                 ->with('error', 'Record not found.');
         }
 
-        $this->deleteRecordImages($category);
+        $this->deleteRecordImage($category);
         $category->delete();
 
         return redirect()
