@@ -200,28 +200,12 @@
 
         addSlugifyEvent('title', 'slug');
 
-        $('#category').change(function(){
-            var categoryId = $(this).val();
-
-            $.ajax({
-                url: '{{ route("admin.category-sub-categories.index") }}',
-                type: 'get',
-                data: {
-                    category_id: categoryId
-                },
-                dataType: 'json',
-                success: function(response){
-                    $('#sub_category').find('option').not(':first').remove();
-
-                    $.each(response.sub_categories, function(id, name){
-                        $('#sub_category').append('<option value=' + id + '>' + name + '</option');
-                    });
-                },
-                error: function(xhr, status, error){
-                    const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
-                    showError(message);
-                }
-            });
-        });
+        loadDropdown(
+            'category',
+            'sub_category',
+            '{{ route("admin.category-sub-categories.index") }}',
+            function(value){ return {category_id: value}; },
+            function(response){ return response.sub_categories }
+        );
     </script>
 @endsection
