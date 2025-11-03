@@ -1,44 +1,67 @@
-// ✅ Reset the entire form
+// Reset the entire form
 function resetForm(formId) {
     const form = $('#' + formId);
     if (form.length) {
         form[0].reset();
         $('.summernote').summernote('code', '');
 
-        // ✅ Remove Dropzone files *only* in this form
+        // Remove Dropzone files *only* in this form
         form.find('.dropzone').each(function (index, element) {
             const dz = Dropzone.forElement(element);
             if (dz) dz.removeAllFiles(true);
         });
 
-        // ✅ Remove hidden image inputs only in this form
+        // Remove hidden image inputs only in this form
         form.find('input[type="hidden"][data-dz-image-id]').remove();
         hideValidationErrors(formId);
     }
 }
 
-// ✅ Show validation errors (supports multiple messages per field)
+// Show validation errors (supports multiple messages per field)
 function showValidationErrors(errors) {
     $.each(errors, function (field, messages) {
-        const input = $('#' + field);
+        // Convert "images_order.123" → "images_order[123]"
+        const bracketName = field.replace(/\.(\w+)/g, '[$1]');
+
+        // Escape brackets for jQuery selector
+        const safeName = bracketName.replace(/([:[\].])/g, '\\$1');
+
+        // Try to find element by id, name, or data-name
+        let input = $('#' + field.replace(/\./g, '\\.'));
+        if (!input.length) input = $('[name="' + bracketName + '"]');
+        if (!input.length) input = $('[data-name="' + field + '"]');
+
+        const parentDiv = input.closest('.mb-3');
+        const messageArray = Array.isArray(messages) ? messages : [messages];
+        const allMessages = messageArray.join('<br>');
+
+        // Remove any previous messages for this field
+        parentDiv.find('.invalid-feedback').remove();
+
+        // Add invalid class for styling (applies to Dropzones too)
         input.addClass('is-invalid');
 
-        // Remove any previous feedback messages for this input
-        // input.nextAll('.invalid-feedback').remove();
-
-        // Ensure messages is always treated as an array
-        const messageArray = Array.isArray(messages) ? messages : [messages];
-
-        // Append all messages
-        const allMessages = messageArray.join('<br>');
-        input.after('<p class="invalid-feedback">' + allMessages + '</p>');
+        // Handle Dropzone specifically
+        if (input.hasClass('dropzone')) {
+            input.after(
+                '<p class="invalid-feedback">' +
+                allMessages +
+                '</p>'
+            );
+        } else {
+            input.after(
+                '<p class="invalid-feedback">' +
+                allMessages +
+                '</p>'
+            );
+        }
     });
 }
 
-// ✅ Hide all validation errors inside a specific form
+// Hide all validation errors inside a specific form
 function hideValidationErrors(formId) {
     $('#' + formId)
-        .find('input, select, textarea')
+        .find('input, select, textarea, .dropzone')
         .each(function () {
             $(this)
                 .removeClass('is-invalid')
