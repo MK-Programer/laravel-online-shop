@@ -16,7 +16,7 @@ $(document).on('submit', 'form', function () {
     $('#page_loader').fadeIn(200);
 });
 
-// ✅ Handle back/forward navigation (bfcache restore)
+// Handle back/forward navigation (bfcache restore)
 $(window).on('pageshow', function (event) {
     // If the page was restored from bfcache, hide the loader
     if (event.originalEvent.persisted) {
@@ -27,12 +27,12 @@ $(window).on('pageshow', function (event) {
     }
 });
 
-// ✅ Show loader when any AJAX request starts
+// Show loader when any AJAX request starts
 $(document).ajaxStart(function () {
     $('#page_loader').fadeIn(200);
 });
 
-// ✅ Hide loader when all AJAX requests complete
+// Hide loader when all AJAX requests complete
 $(document).ajaxStop(function () {
     $('#page_loader').fadeOut(400);
 });
@@ -41,23 +41,55 @@ $(document).ajaxError(function () {
     $('#page_loader').fadeOut(400);
 });
 
-// ✅ Convert text to slug
+// Convert text to slug
 function slugify(text) {
-  return text
-    .toString()                      // make sure it's a string
-    .normalize('NFD')                // split accented characters (e.g. é → e +  ́)
-    .replace(/[\u0300-\u036f]/g, '') // remove accents
-    .toLowerCase()                   // convert to lowercase
-    .trim()                          // remove leading/trailing spaces
-    .replace(/[^a-z0-9\s-]/g, '')    // remove invalid chars
-    .replace(/\s+/g, '-')            // replace spaces with hyphens
-    .replace(/-+/g, '-');            // collapse multiple hyphens
+    return text
+        .toString()                      // make sure it's a string
+        .normalize('NFD')                // split accented characters (e.g. é → e +  ́)
+        .replace(/[\u0300-\u036f]/g, '') // remove accents
+        .toLowerCase()                   // convert to lowercase
+        .trim()                          // remove leading/trailing spaces
+        .replace(/[^a-z0-9\s-]/g, '')    // remove invalid chars
+        .replace(/\s+/g, '-')            // replace spaces with hyphens
+        .replace(/-+/g, '-');            // collapse multiple hyphens
 }
 
-function addSlugifyEvent(sourceId, destinationId){
-    $('#'+sourceId).change(function() {
+function addSlugifyEvent(sourceId, destinationId) {
+    $('#' + sourceId).change(function () {
         let name = $(this).val();
         let slug = slugify(name);
-        $('#'+destinationId).val(slug);
+        $('#' + destinationId).val(slug);
     });
 }
+
+function loadDropdown(triggerSelectorId, targetSelectorId, url, dataFunction, processResponse, clearBefore = true) {
+    $('#' + triggerSelectorId).change(function () {
+        var value = $(this).val();
+
+        if (!value) {
+            if (clearBefore) $('#' + targetSelectorId).find('option').not(':first').remove();
+            return;
+        }
+
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: dataFunction(value), // dynamically generate data based on selected value
+            dataType: 'json',
+            success: function (response) {
+                if (clearBefore) $('#' + targetSelectorId).find('option').not(':first').remove();
+
+                const items = processResponse(response); // get items to populate dropdown
+
+                $.each(items, function (id, name) {
+                    $('#' + targetSelectorId).append('<option value="' + id + '">' + name + '</option>');
+                });
+            },
+            error: function (xhr, status, error) {
+                const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
+                showError(message);
+            }
+        });
+    });
+}
+
