@@ -21,9 +21,10 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $record = $this->route('record');
         return [
-            'title' => 'required|string|unique:products,title',
-            'slug' => 'required|string|unique:products,slug',
+            'title' => 'required|string|unique:products,title' . ($record ? ',' . $record : ''),
+            'slug' => 'required|string|unique:products,slug' . ($record ? ',' . $record : ''),
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'compare_price' => 'numeric|nullable',
@@ -31,12 +32,12 @@ class ProductRequest extends FormRequest
             'sub_category' => 'nullable|integer',
             'brand' => 'nullable|integer',
             'is_featured' => 'required|in:Yes,No',
-            'sku' => 'required|string|unique:products,sku',
-            'bar_code' => 'nullable|string|unique:products,bar_code',
+            'sku' => 'required|string|unique:products,sku' . ($record ? ',' . $record : ''),
+            'bar_code' => 'nullable|string|unique:products,bar_code' . ($record ? ',' . $record : ''),
             'track_qty' => 'required|in:Yes,No',
             'qty' => 'required_if:track_qty,Yes|integer|nullable',
             'status' => 'required|boolean',
-            'images_order' => 'required|array|min:1',
+            'images_order' => 'required_with:images_id|array|min:1',
             'images_order.*' => 'required|integer|min:1|distinct',
         ];
     }
