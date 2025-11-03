@@ -7,24 +7,16 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductImage;
-use App\Models\TempImage;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
 
 class ProductController extends Controller
 {
-    private $tempImagesController,
-        $imagesFolderPath,
-        $thumbFolderPath;
+    private $productImageController;
 
     public function __construct()
     {
-        $this->tempImagesController = new TempImagesController();
-        $this->imagesFolderPath = ProductImage::imagesFolderPath();
-        $this->thumbFolderPath = ProductImage::thumbFolderPath();
+        $this->productImageController = new ProductImageController();
     }
 
     public function index(Request $request)
@@ -51,7 +43,17 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        $product = new Product();
+        return $this->saveProduct($request);
+    }
+
+    private function saveProduct(ProductRequest $request, $record = null)
+    {
+        // 🧩 Create or update product
+        $product = $record ? Product::find($record) : new Product();
+        if($record && !$product){
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
         $product->title = $request->title;
         $product->slug = $request->slug;
         $product->description = $request->description;
@@ -68,64 +70,43 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->save();
 
+        if ($request->has('remove_existing_image')) {
+            $this->productImageController->destroy($request->remove_existing_image);
+        }
+
         // 🧩 Handle product images
         if (!empty($request->images_id)) {
-            $this->saveProductImages($product->id, $request->images_id, $request->images_order);
+            $this->productImageController->saveProductImages($product->id, $request->images_id, $request->images_order);
         }
 
-        return response()->json(['message' => 'Product added successfully.']);
+        // Handle product images order 
+        if (!empty($request->images_id) && !empty($request->images_order)) {
+            $this->productImageController->reorderRecordImages($product->id, $request->images_id, $request->images_order);
+        }
+
+        $message = $record ? 'Product updated successfully.' : 'Product added successfully.';
+        return response()->json(['message' => $message]);
     }
 
-    private function saveProductImages($productId, $tempImagesId, $tempImagesOrder)
+    public function edit($record)
     {
-        $imageManager = new ImageManager(new Driver());
-        $tempImagesOrder = array_values($tempImagesOrder);
-
-        foreach ($tempImagesId as $i => $tempImageId) {
-            $tempImage = TempImage::find($tempImageId);
-            if (!$tempImage) {
-                continue;
-            }
-
-            $order = $tempImagesOrder[$i];
-
-            // Create record first
-            $productImage = new ProductImage();
-            $productImage->product_id = $productId;
-            $productImage->sort_order = $order;
-            $productImage->image = 'NULL';
-            $productImage->save();
-
-            // Prepare paths
-            $tempImagePath = $this->tempImagesController->getTempImagePath($tempImage);
-            $tempThumbPath = $this->tempImagesController->getTempThumbPath($tempImage);
-            $extension = pathinfo($tempImage->image_name, PATHINFO_EXTENSION);
-            $newFileName = "{$productId}-{$productImage->id}-" . time() . ".{$extension}";
-
-            // Update filename in DB
-            $productImage->image = $newFileName;
-            $productImage->save();
-
-            // Large image (scaled)
-            File::ensureDirectoryExists("{$this->imagesFolderPath}/large", 0755, true);
-            $largeDestination = "{$this->imagesFolderPath}/large/{$newFileName}";
-            $imageManager->read($tempImagePath)
-                ->scale(width: 1400)
-                ->save($largeDestination);
-
-            // Small image (square cropped)
-            File::ensureDirectoryExists("{$this->imagesFolderPath}/small", 0755, true);
-            $smallDestination = "{$this->imagesFolderPath}/small/{$newFileName}";
-            $imageManager->read($tempImagePath)
-                ->cover(300, 300, 'center')
-                ->save($smallDestination);
-
-            // Thumbnail
-            File::ensureDirectoryExists($this->thumbFolderPath, 0755, true);
-            File::copy($tempThumbPath, "{$this->thumbFolderPath}/{$newFileName}");
-
-            // Delete from temp
-            $this->tempImagesController->delete(new Request(['images_id' => [$tempImageId]]));
+        $product = Product::with(['images'])->find($record);
+        if(empty($product))
+        {
+            return redirect()
+                ->route('admin.products.index')
+                ->with('error', 'Record not found.');
         }
+        
+        $subCategories = SubCategory::where('category_id', $product->category_id)->pluck('name', 'id');
+        $categories = Category::getNameIdPairs();
+        $brands = Brand::getNameIdPairs();
+        return view('admin.products.edit', compact('product', 'categories', 'subCategories', 'brands'));
     }
+
+    public function update($record, ProductRequest $request)
+    {
+        return $this->saveProduct($request, $record);
+    }
+    
 }
