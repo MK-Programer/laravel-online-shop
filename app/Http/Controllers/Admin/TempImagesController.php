@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -45,19 +44,16 @@ class TempImagesController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // todo
     public function getTempImagePath($tempImage)
     {
         return public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$tempImage->folder_name}/{$tempImage->image_name}");
     }
 
-    // todo
     public function getTempThumbPath($tempImage)
     {
         return public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$tempImage->folder_name}/thumb/{$tempImage->image_name}");
     }
 
-    // todo
     /**
      * Store a single uploaded image temporarily and generate a thumbnail.
      */
@@ -95,7 +91,6 @@ class TempImagesController extends Controller
             ->save("{$thumbFolderPath}/{$fileName}");
     }
 
-    // todo
     /**
      * Delete a temporary image and its thumbnail.
      */

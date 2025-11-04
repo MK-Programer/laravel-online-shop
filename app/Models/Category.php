@@ -16,7 +16,6 @@ class Category extends Model
         'status',
     ];
 
-    // todo
     public static function imagesFolderLocation()
     {
         return config('app.admin_folder_name') . '/' . config('app.uploads_folder_name') . '/category';
