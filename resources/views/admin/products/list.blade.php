@@ -47,7 +47,7 @@
                                 <th width="60">ID</th>
                                 <th width="80"></th>
                                 <th>Product</th>
-                                <th>Price</th>
+                                <th>Price <small class="text-danger">{{ config('app.currency') }}</small> </th>
                                 <th>Qty <small class="text-danger">left in Stock</small> </th>
                                 <th>SKU</th>
                                 <th width="100">Status</th>

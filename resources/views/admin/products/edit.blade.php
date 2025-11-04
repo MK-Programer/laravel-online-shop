@@ -72,14 +72,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="price">Price</label>
+                                            <label for="price">Price <small class="text-danger">{{ config('app.currency') }}</small> </label>
                                             <input type="text" name="price" id="price" class="form-control"
                                                 placeholder="Price" value="{{ $product->price }}">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label for="compare_price">Compare at Price</label>
+                                            <label for="compare_price">Compare at Price <small class="text-danger">{{ config('app.currency') }}</small> </label>
                                             <input type="text" name="compare_price" id="compare_price" class="form-control"
                                                 placeholder="Compare Price" value="{{ $product->compare_price }}">
                                             <p class="text-muted mt-3">
