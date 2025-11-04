@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\HomeController;
@@ -9,7 +10,8 @@ use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Controllers\Admin\CategorySubCategoryController;
 use App\Http\Controllers\Admin\TempImagesController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [CustomerHomeController::class, 'index'])->name('customer.home');
 
 Route::prefix('admin')->group(function(){
     Route::middleware('admin.guest')->group(function(){
