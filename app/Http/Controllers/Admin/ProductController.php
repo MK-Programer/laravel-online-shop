@@ -109,4 +109,20 @@ class ProductController extends Controller
         return $this->saveProduct($request, $record);
     }
     
+    public function destroy($record, Request $request)
+    {
+        $product = Product::with(['images'])->find($record);
+        if(empty($product))
+        {
+            return redirect()
+                ->route('admin.products.index')
+                ->with('error', 'Record not found.');
+        }
+
+        $this->productImageController->destroy($product->images->pluck('id'));
+        $product->delete();
+        return redirect()
+            ->route('admin.products.index')
+            ->with('success', 'Record deleted successfully.');
+    }
 }

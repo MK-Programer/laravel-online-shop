@@ -97,12 +97,12 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="#"
+                                        <form action="{{ route('admin.products.destroy', ['record' => $product->id]) }}"
                                             method="post" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
                                             <a href="#"
-                                                onclick="if(confirm('Are you sure you want to delete this category?')) { this.closest('form').submit(); }"
+                                                onclick="if(confirm('Are you sure you want to delete this product?')) { this.closest('form').submit(); }"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
