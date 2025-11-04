@@ -14,14 +14,12 @@ use Illuminate\Support\Facades\Log;
 class ProductImageController extends Controller
 {
     private $tempImagesController,
-        $imagesFolderPath,
-        $thumbFolderPath;
+        $imagesFolderPath;
 
     public function __construct()
     {
         $this->tempImagesController = new TempImagesController();
         $this->imagesFolderPath = ProductImage::imagesFolderPath();
-        $this->thumbFolderPath = ProductImage::thumbFolderPath();
     }
 
     public function saveProductImages($productId, $tempImagesId, $tempImagesOrder)
@@ -55,22 +53,22 @@ class ProductImageController extends Controller
             $productImage->save();
 
             // Large image (scaled)
-            File::ensureDirectoryExists("{$this->imagesFolderPath}/large", 0755, true);
-            $largeDestination = "{$this->imagesFolderPath}/large/{$newFileName}";
+            File::ensureDirectoryExists("{$this->imagesFolderPath}/{$productId}/large", 0755, true);
+            $largeDestination = "{$this->imagesFolderPath}/{$productId}/large/{$newFileName}";
             $imageManager->read($tempImagePath)
                 ->scale(width: 1400)
                 ->save($largeDestination);
 
             // Small image (square cropped)
-            File::ensureDirectoryExists("{$this->imagesFolderPath}/small", 0755, true);
-            $smallDestination = "{$this->imagesFolderPath}/small/{$newFileName}";
+            File::ensureDirectoryExists("{$this->imagesFolderPath}/{$productId}/small", 0755, true);
+            $smallDestination = "{$this->imagesFolderPath}/{$productId}/small/{$newFileName}";
             $imageManager->read($tempImagePath)
                 ->cover(300, 300, 'center')
                 ->save($smallDestination);
 
             // Thumbnail
-            File::ensureDirectoryExists($this->thumbFolderPath, 0755, true);
-            File::copy($tempThumbPath, "{$this->thumbFolderPath}/{$newFileName}");
+            File::ensureDirectoryExists("{$this->imagesFolderPath}/{$productId}/thumb", 0755, true);
+            File::copy($tempThumbPath, "{$this->imagesFolderPath}/{$productId}/thumb/{$newFileName}");
 
             // Delete from temp
             $this->tempImagesController->delete(new Request(['images_id' => [$tempImageId]]));
@@ -82,15 +80,17 @@ class ProductImageController extends Controller
         $productImages = ProductImage::whereIn('id', $imagesId)->get();
         foreach($productImages as $productImage)
         {
+            $productId = $productImage->product_id;
+            $baseImagesFolderPath = $this->imagesFolderPath . '/' . $productId . '/';
             $image = $productImage->image;
-            if (File::exists($this->thumbFolderPath . '/' . $image))
-                File::delete($this->thumbFolderPath . '/' . $image);
+            if (File::exists($baseImagesFolderPath . 'thumb/' . $image))
+                File::delete($baseImagesFolderPath . 'thumb/' . $image);
 
-            if (File::exists($this->imagesFolderPath . '/large/' . $image))
-                File::delete($this->imagesFolderPath . '/large/' . $image);
+            if (File::exists($baseImagesFolderPath . 'large/' . $image))
+                File::delete($baseImagesFolderPath . 'large/' . $image);
             
-            if (File::exists($this->imagesFolderPath . '/small/' . $image))
-                File::delete($this->imagesFolderPath . '/small/' . $image);
+            if (File::exists($baseImagesFolderPath . 'small/' . $image))
+                File::delete($baseImagesFolderPath . 'small/' . $image);
             
             $productImage->delete();
         }

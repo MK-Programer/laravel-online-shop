@@ -21,16 +21,6 @@ class ProductImage extends Model
         return public_path(self::imagesFolderLocation());
     }
 
-    public static function thumbFolderLocation()
-    {
-        return self::imagesFolderLocation() . '/thumb';
-    }
-
-    public static function thumbFolderPath()
-    {
-        return public_path(self::thumbFolderLocation());
-    }
-
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -39,6 +29,6 @@ class ProductImage extends Model
     public function getThumb()
     {
         $value = $this->getRawOriginal('image');
-        return $value ? url(self::thumbFolderLocation() . '/' . $value) : null;
+        return $value ? url(self::imagesFolderLocation() . '/' . $this->product_id . '/thumb/' . $value) : null;
     }
 }
