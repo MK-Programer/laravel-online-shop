@@ -3,8 +3,8 @@
 /public/build
 /public/hot
 /public/storage
-/public/admin-temp/
-/public/admin-uploads/
+/public/admin/temp/
+/public/admin/uploads/
 /public/ignore-temp/
 /storage/*.key
 /vendor

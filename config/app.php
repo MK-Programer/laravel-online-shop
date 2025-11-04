@@ -59,13 +59,15 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
-    'admin_temp_folder' => 'admin-temp',
-    'admin_uploads_folder' => 'admin-uploads',
+    'admin_folder_name' => 'admin',
+
+    'temp_folder_name' => 'temp',
+    'uploads_folder_name' => 'uploads',
     
     'default_max_files' => 1,
     'products_max_files' => 10,
 
-    'default_thumb' => 'admin-assets/img/default-150x150.png',
+    'default_thumb' => 'admin/assets/img/default-150x150.png',
 
     'currency' => '$',
 

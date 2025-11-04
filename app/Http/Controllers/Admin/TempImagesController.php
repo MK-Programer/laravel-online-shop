@@ -17,7 +17,7 @@ class TempImagesController extends Controller
 
     public function __construct()
     {
-        $this->tempFolderName = config('app.admin_temp_folder', 'admin-temp');
+        $this->tempFolderName = config('app.temp_folder_name', 'admin-temp');
         $this->imageManager = new ImageManager(new Driver());
     }
 
@@ -45,22 +45,25 @@ class TempImagesController extends Controller
         return response()->json(['success' => true]);
     }
 
+    // todo
     public function getTempImagePath($tempImage)
     {
-        return public_path("{$this->tempFolderName}/{$tempImage->folder_name}/{$tempImage->image_name}");
+        return public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$tempImage->folder_name}/{$tempImage->image_name}");
     }
 
+    // todo
     public function getTempThumbPath($tempImage)
     {
-        return public_path("{$this->tempFolderName}/{$tempImage->folder_name}/thumb/{$tempImage->image_name}");
+        return public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$tempImage->folder_name}/thumb/{$tempImage->image_name}");
     }
 
+    // todo
     /**
      * Store a single uploaded image temporarily and generate a thumbnail.
      */
     private function storeTempImage($image, $folder)
     {
-        $folderPath = public_path("{$this->tempFolderName}/{$folder}");
+        $folderPath = public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$folder}");
         File::ensureDirectoryExists($folderPath, 0755, true);
 
         $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -92,6 +95,7 @@ class TempImagesController extends Controller
             ->save("{$thumbFolderPath}/{$fileName}");
     }
 
+    // todo
     /**
      * Delete a temporary image and its thumbnail.
      */
@@ -101,12 +105,15 @@ class TempImagesController extends Controller
         if (!$images) return;
 
         foreach($images as $image){
-            $imagePath = public_path("{$this->tempFolderName}/{$image->folder_name}/{$image->image_name}");
-            if (File::exists($imagePath)) {
+            $imagePath = public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$image->folder_name}/{$image->image_name}");
+            if (File::exists($imagePath)) 
                 File::delete($imagePath);
-                File::delete("{$this->tempFolderName}/{$image->folder_name}/thumb/{$image->image_name}");
-                $image->delete();
-            }
+            
+            $thumbPath = public_path(config('app.admin_folder_name')."/{$this->tempFolderName}/{$image->folder_name}/thumb/{$image->image_name}");
+            if(File::exists($thumbPath))
+                File::delete($thumbPath);
+
+            $image->delete();
         }
     }
 }
