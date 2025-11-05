@@ -51,6 +51,7 @@ class SubCategoryController extends Controller
         $subCategory->name = $request->name;
         $subCategory->slug = $request->slug;
         $subCategory->status = $request->status;
+        $subCategory->show_in_home = $request->show_in_home;
         $subCategory->save();
 
         $message = $record ? 'Sub Category updated successfully.' : 'Sub Category added successfully.';
