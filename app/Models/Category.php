@@ -14,6 +14,7 @@ class Category extends Model
         'slug',
         'image',
         'status',
+        'show_in_home',
     ];
 
     public static function imagesFolderLocation()
@@ -36,14 +37,15 @@ class Category extends Model
         return public_path(self::thumbFolderLocation());
     }
 
-    public function getImageAttribute($value)
+    public function getImage()
     {
+        $value = $this->image;
         return $value ? url(self::imagesFolderLocation() . '/' . $value) : null;
     }
 
     public function getThumb()
     {
-        $value = $this->getRawOriginal('image');
+        $value = $this->image;
         return $value ? url(self::thumbFolderLocation() . '/' . $value) : null;
     }
 
@@ -51,5 +53,15 @@ class Category extends Model
     {
         $categories = self::orderBy('name')->pluck('name', 'id');
         return $categories;
+    }
+
+    public function sub_categories()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

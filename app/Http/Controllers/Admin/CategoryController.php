@@ -56,6 +56,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->status = $request->status;
+        $category->show_in_home = $request->show_in_home;
         $category->save();
 
         // Handle image removal
@@ -122,8 +123,8 @@ class CategoryController extends Controller
 
     private function deleteRecordImage($category)
     {
-        $image = $category->getRawOriginal('image');
-        if ($category->image) {
+        $image = $category->image;
+        if ($image) {
             if(File::exists($this->imagesFolderPath . '/' . $image))
                 File::delete($this->imagesFolderPath . '/' . $image);
 

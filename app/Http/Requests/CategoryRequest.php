@@ -28,6 +28,7 @@ class CategoryRequest extends FormRequest
             'name' => 'required|string|unique:categories,name' . ($record ? ',' . $record : ''),
             'slug' => 'required|string|unique:categories,slug' . ($record ? ',' . $record : ''),
             'status' => 'boolean',
+            'show_in_home' => 'boolean',
         ];
     }
 }
