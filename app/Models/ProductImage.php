@@ -21,14 +21,26 @@ class ProductImage extends Model
         return public_path(self::imagesFolderLocation());
     }
 
-    public function product()
+    public function getSmallImage()
     {
-        return $this->belongsTo(Product::class);
+        $image = $this->image;
+        return $image ? url(self::imagesFolderLocation() . '/' . $this->product_id .  '/small/' . $image) : null;
+    }
+
+    public function getLargeImage()
+    {
+        $image = $this->image;
+        return $image ? url(self::imagesFolderLocation() . '/' . $this->product_id . '/large/' . $image) : null;
     }
 
     public function getThumb()
     {
-        $value = $this->getRawOriginal('image');
-        return $value ? url(self::imagesFolderLocation() . '/' . $this->product_id . '/thumb/' . $value) : null;
+        $image = $this->image;
+        return $image ? url(self::imagesFolderLocation() . '/' . $this->product_id . '/thumb/' . $image) : null;
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }
