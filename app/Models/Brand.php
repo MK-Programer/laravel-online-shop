@@ -20,4 +20,9 @@ class Brand extends Model
         $brands = self::orderBy('name')->pluck('name', 'id');
         return $brands;
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
