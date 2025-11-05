@@ -64,7 +64,7 @@
                                             $productImage = $productImage->getThumb();
                                         else
                                             $productImage = asset(config('app.default_thumb'));
-                                   @endphp
+                                    @endphp
                                     <td><img src="{{ $productImage }}" alt="#" class="img-thumbnail" width="50"></td>
                                     <td><a href="#">{{ $product->title }}</a></td>
                                     <td>{{ $product->price }}</td>
