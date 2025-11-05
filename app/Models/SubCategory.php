@@ -14,12 +14,8 @@ class SubCategory extends Model
         'name',
         'slug',
         'status',
+        'show_in_home',
     ];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 
     public static function getNameIdPairs($categoryId)
     {
@@ -28,5 +24,15 @@ class SubCategory extends Model
                             })
                             ->orderBy('name')->pluck('name', 'id');
         return $subCategories;
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }
