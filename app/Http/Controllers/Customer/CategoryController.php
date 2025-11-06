@@ -38,4 +38,21 @@ class CategoryController extends Controller
             ->take($this->categoriesHomeLimit)
             ->get();
     }
+
+    public function getCategories()
+    {
+        return Category::whereHas(
+                'products', 
+                function($qry){
+                    $qry->where('status', 1);
+            })
+            ->where('status', 1)
+            ->with([
+                'sub_categories' => function($qry){
+                    $qry->where('status', 1);
+                }
+            ])
+            ->orderBy('name')
+            ->get();
+    }
 }
