@@ -127,7 +127,9 @@
                         @endforeach
 
                         <div class="col-md-12 pt-5">
-                            <nav aria-label="Page navigation example">
+                            {{-- include search param in url with pagination --}}
+                            {{ $products->withQueryString()->links() }}
+                            {{-- <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-end">
                                     <li class="page-item disabled">
                                         <a class="page-link" href="#" tabindex="-1"
@@ -140,7 +142,7 @@
                                         <a class="page-link" href="#">Next</a>
                                     </li>
                                 </ul>
-                            </nav>
+                            </nav> --}}
                         </div>
                     </div>
                 </div>

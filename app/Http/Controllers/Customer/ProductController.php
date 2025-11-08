@@ -72,6 +72,6 @@ class ProductController extends Controller
             ->whereHas('images')
             ->with(['images'])
             ->orderBy($sortByColumn, $sortDirection)
-            ->get();
+            ->paginate(6);
     }
 }
