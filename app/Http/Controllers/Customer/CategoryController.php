@@ -16,11 +16,21 @@ class CategoryController extends Controller
             ->whereHas(
                 'sub_categories', 
                 function($qry){
-                    $qry->whereAll(['status', 'show_in_home'], 1);
+                    $qry->whereHas(
+                            'products', 
+                            function($qry){
+                                $qry->where('status', 1);
+                        })
+                        ->whereAll(['status', 'show_in_home'], 1);
             })
             ->with([
                 'sub_categories' => function($qry){
-                    $qry->whereAll(['status', 'show_in_home'], 1);
+                    $qry->whereHas(
+                            'products', 
+                            function($qry){
+                                $qry->where('status', 1);
+                        })
+                        ->where('status', 1);
                 }
             ])
             ->whereHas(
