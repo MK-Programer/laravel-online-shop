@@ -31,10 +31,10 @@
         <meta name="twitter:card" content="summary_large_image" />
         
 
-        <link rel="stylesheet" type="text/css" href="{{ asset('customer-assets/css/slick.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('customer-assets/css/slick-theme.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('customer-assets/css/ion.rangeSlider.min.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('customer-assets/css/style.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('customer/assets/css/slick.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('customer/assets/css/slick-theme.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('customer/assets/css/ion.rangeSlider.min.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('customer/assets/css/style.css') }}" />
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,20 +58,20 @@
 
         @include('customer.layouts.footer')
 
-        <script src="{{ asset('customer-assets/js/jquery-3.6.0.min.js') }}"></script>
-        <script src="{{ asset('customer-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
-        <script src="{{ asset('customer-assets/js/instantpages.5.1.0.min.js') }}"></script>
-        <script src="{{ asset('customer-assets/js/lazyload.17.6.0.min.js') }}"></script>
-        <script src="{{ asset('customer-assets/js/slick.min.js') }}"></script>
-        <script src="{{ asset('customer-assets/js/ion.rangeSlider.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/jquery-3.6.0.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/instantpages.5.1.0.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/lazyload.17.6.0.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/slick.min.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/ion.rangeSlider.min.js') }}"></script>
         {{-- Loading Manager Js --}}
-        <script src="{{ asset('customer-assets/js/loading-manager.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/loading-manager.js') }}"></script>
         <script>
             const currency = "{{ config('app.currency') }}";
             const priceMin = "{{ config('app.price_min') }}";
             const priceMax = "{{ config('app.price_max') }}";
         </script>
-        <script src="{{ asset('customer-assets/js/custom.js') }}"></script>
+        <script src="{{ asset('customer/assets/js/custom.js') }}"></script>
         <script>
             window.onscroll = function() {myFunction()};
 

@@ -10,9 +10,9 @@
 
                     <picture>
                         <source media="(max-width: 799px)"
-                            srcset="{{ asset('customer-assets/images/carousel-1-m.jpg') }}" />
-                        <source media="(min-width: 800px)" srcset="{{ asset('customer-assets/images/carousel-1.jpg') }}" />
-                        <img src="{{ asset('customer-assets/images/carousel-1.jpg') }}" alt="" />
+                            srcset="{{ asset('customer/assets/images/carousel-1-m.jpg') }}" />
+                        <source media="(min-width: 800px)" srcset="{{ asset('customer/assets/images/carousel-1.jpg') }}" />
+                        <img src="{{ asset('customer/assets/images/carousel-1.jpg') }}" alt="" />
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -28,9 +28,9 @@
 
                     <picture>
                         <source media="(max-width: 799px)"
-                            srcset="{{ asset('customer-assets/images/carousel-2-m.jpg') }}" />
-                        <source media="(min-width: 800px)" srcset="{{ asset('customer-assets/images/carousel-2.jpg') }}" />
-                        <img src="{{ asset('customer-assets/images/carousel-2.jpg') }}" alt="" />
+                            srcset="{{ asset('customer/assets/images/carousel-2-m.jpg') }}" />
+                        <source media="(min-width: 800px)" srcset="{{ asset('customer/assets/images/carousel-2.jpg') }}" />
+                        <img src="{{ asset('customer/assets/images/carousel-2.jpg') }}" alt="" />
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -47,9 +47,9 @@
 
                     <picture>
                         <source media="(max-width: 799px)"
-                            srcset="{{ asset('customer-assets/images/carousel-3-m.jpg') }}" />
-                        <source media="(min-width: 800px)" srcset="{{ asset('customer-assets/images/carousel-3.jpg') }}" />
-                        <img src="{{ asset('customer-assets/images/carousel-3.jpg') }}" alt="" />
+                            srcset="{{ asset('customer/assets/images/carousel-3-m.jpg') }}" />
+                        <source media="(min-width: 800px)" srcset="{{ asset('customer/assets/images/carousel-3.jpg') }}" />
+                        <img src="{{ asset('customer/assets/images/carousel-3.jpg') }}" alt="" />
                     </picture>
 
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
