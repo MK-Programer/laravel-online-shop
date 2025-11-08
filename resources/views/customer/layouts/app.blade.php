@@ -51,7 +51,8 @@
 
         @include('customer.layouts.navs.categories-bar')
 
-        <main>
+        <main> Global Page Loader -->
+            @include('customer.layouts.loading')
             @yield('content')
         </main>
 
@@ -63,6 +64,8 @@
         <script src="{{ asset('customer-assets/js/lazyload.17.6.0.min.js') }}"></script>
         <script src="{{ asset('customer-assets/js/slick.min.js') }}"></script>
         <script src="{{ asset('customer-assets/js/ion.rangeSlider.min.js') }}"></script>
+        {{-- Loading Manager Js --}}
+        <script src="{{ asset('customer-assets/js/loading-manager.js') }}"></script>
         <script>
             const currency = "{{ config('app.currency') }}";
             const priceMin = "{{ config('app.price_min') }}";
