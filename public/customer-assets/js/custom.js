@@ -68,3 +68,82 @@ $("#isShippingDiffernt").click(function(){
         $("#shippingForm").addClass('d-none');
     }
 });
+
+
+/**
+ * Initialize reusable filters
+ * @param {Object} options
+ *  - checkboxSelectorMap: object → key = query param name, value = checkbox selector
+ *      e.g., { brands: '.brand-label', categories: '.category-label' }
+ *  - sliderSelectorMap: object → key = min/max query param name, value = slider selector
+ *      e.g., { price_min: '.js-range-slider', price_max: '.js-range-slider' }
+ *  - url: string → base URL for filtering
+ */
+function initFilters(options = {}) {
+    var url = options.url || window.location.href.split('?')[0];
+    var sliders = {};
+
+    // Initialize sliders
+    if (options.sliderSelectorMap) {
+        $.each(options.sliderSelectorMap, function(paramName, selector) {
+
+            var slider = $(selector).ionRangeSlider({
+                type: 'double',
+                min: options.sliderOptions?.min || priceMin,
+                max: options.sliderOptions?.max || priceMax,
+                from: options.sliderOptions.from,
+                to: options.sliderOptions.to,
+                step: options.sliderOptions?.step || 10,
+                skin: 'round',
+                max_postfix: '+',
+                prefix: currency,
+                onFinish: applyFilters
+            }).data('ionRangeSlider');
+
+            sliders[paramName] = slider;
+        });
+    }
+
+    // Initialize checkboxes
+    if (options.checkboxSelectorMap) {
+        $.each(options.checkboxSelectorMap, function(paramName, selector) {
+            $(selector).change(applyFilters);
+        });
+    }
+
+    // Initialize selects
+    if (options.selectSelectorMap) {
+        $.each(options.selectSelectorMap, function(paramName, selector) {
+            $(selector).change(applyFilters);
+        });
+    }
+
+    // Apply filters
+    function applyFilters() {
+        var query = [];
+
+        // Checkbox values
+        $.each(options.checkboxSelectorMap || {}, function(paramName, selector) {
+            var values = $(selector + ':checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            if (values.length) query.push(paramName + '=' + values.join(','));
+        });
+
+        // Slider values
+        $.each(sliders, function(paramName, slider) {
+            query.push(paramName + '_min=' + slider.result.from);
+            query.push(paramName + '_max=' + slider.result.to);
+        });
+
+        // Select values
+        $.each(options.selectSelectorMap || {}, function(paramName, selector) {
+            var value = $(selector).val();
+            if (value) query.push(paramName + '=' + value);
+        });
+
+        window.location.href = url + (query.length ? '?' + query.join('&') : '');
+    }
+}
+
