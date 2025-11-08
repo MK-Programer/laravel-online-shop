@@ -55,11 +55,7 @@ $(document).ready(function(){
         }] 
     
     });
-   
-
-   
 });
-
 
 $("#isShippingDiffernt").click(function(){
     if ($(this).is(':checked') == true) {
@@ -146,4 +142,3 @@ function initFilters(options = {}) {
         window.location.href = url + (query.length ? '?' + query.join('&') : '');
     }
 }
-
