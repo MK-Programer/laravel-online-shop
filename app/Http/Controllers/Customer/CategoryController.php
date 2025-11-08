@@ -49,7 +49,12 @@ class CategoryController extends Controller
             ->where('status', 1)
             ->with([
                 'sub_categories' => function($qry){
-                    $qry->where('status', 1);
+                    $qry->whereHas(
+                            'products', 
+                            function($qry){
+                                $qry->where('status', 1);
+                        })
+                        ->where('status', 1);
                 }
             ])
             ->orderBy('name')
