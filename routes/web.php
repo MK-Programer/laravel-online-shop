@@ -30,7 +30,7 @@ use App\Http\Controllers\Customer\ShopController;
 // });
 
 Route::get('/', [CustomerHomeController::class, 'index'])->name('customer.home');
-Route::get('shop', [ShopController::class, 'index'])->name('customer.shop');
+Route::get('shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('customer.shop');
 
 Route::prefix('admin')->group(function(){
     Route::middleware('admin.guest')->group(function(){
