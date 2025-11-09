@@ -25,7 +25,10 @@ class ProductRequest extends FormRequest
         return [
             'title' => 'required|string|unique:products,title' . ($record ? ',' . $record : ''),
             'slug' => 'required|string|unique:products,slug' . ($record ? ',' . $record : ''),
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
+            'shipping_returns' => 'nullable|string',
+            'related_products' => 'nullable|string',
             'price' => 'required|numeric',
             'compare_price' => 'numeric|nullable',
             'category' => 'required|integer',
