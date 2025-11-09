@@ -74,4 +74,21 @@ class ProductController extends Controller
             ->orderBy($sortByColumn, $sortDirection)
             ->paginate(6);
     }
+
+    public function getProduct($slug)
+    {
+        return Product::where('slug', $slug)
+            ->where('status', 1)
+            ->whereHas('images')
+            ->with(['images'])
+            ->first();
+    }
+
+    public function index($slug)
+    {
+        $product = $this->getProduct($slug);
+        if(!$product) abort(404);
+
+        return view('customer.product', compact('product'));
+    }
 }
