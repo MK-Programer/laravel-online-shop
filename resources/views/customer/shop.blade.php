@@ -115,10 +115,10 @@
                                         <a class="h6 link" href="product.php">{{ $product->title }}</a>
                                         <div class="price mt-2">
                                             <span
-                                                class="h5"><strong>{{ config('app.currency') . ' ' . $product->price }}</strong></span>
+                                                class="h5"><strong>{{ $product->formattedPrice() }}</strong></span>
                                             @if ($product->compare_price > 0)
                                                 <span
-                                                    class="h6 text-underline"><del>{{ config('app.currency') . ' ' . $product->compare_price }}</del></span>
+                                                    class="h6 text-underline"><del>{{ $product->formattedComparePrice() }}</del></span>
                                             @endif
                                         </div>
                                     </div>
