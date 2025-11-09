@@ -21,6 +21,16 @@ class Product extends Model
         $this->attributes['sku'] = strtoupper($value);
     }
 
+    public function formattedPrice()
+    {
+        return config('app.currency') . $this->price;
+    }
+
+    public function formattedComparePrice()
+    {
+        return config('app.currency') . $this->compare_price;
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
