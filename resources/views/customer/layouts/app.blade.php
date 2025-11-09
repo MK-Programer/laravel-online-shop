@@ -51,7 +51,8 @@
 
         @include('customer.layouts.navs.categories-bar')
 
-        <main> Global Page Loader -->
+        <main> 
+            <!-- Global Page Loader -->
             @include('customer.layouts.loading')
             @yield('content')
         </main>
