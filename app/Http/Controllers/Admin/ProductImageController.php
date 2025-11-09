@@ -56,7 +56,7 @@ class ProductImageController extends Controller
             File::ensureDirectoryExists("{$this->imagesFolderPath}/{$productId}/large", 0755, true);
             $largeDestination = "{$this->imagesFolderPath}/{$productId}/large/{$newFileName}";
             $imageManager->read($tempImagePath)
-                ->scale(width: 1400)
+                ->resizeDown(1000, 1000)
                 ->save($largeDestination);
 
             // Small image (square cropped)
