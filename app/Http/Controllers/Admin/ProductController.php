@@ -56,7 +56,9 @@ class ProductController extends Controller
 
         $product->title = $request->title;
         $product->slug = $request->slug;
+        $product->short_description = $request->short_description;
         $product->description = $request->description;
+        $product->shipping_returns = $request->shipping_returns;
         $product->price = $request->price;
         $product->compare_price = $request->compare_price;
         $product->category_id = $request->category;
