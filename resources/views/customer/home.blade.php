@@ -144,7 +144,7 @@
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
-                                <a href="" class="product-img"><img class="card-img-top"
+                                <a href="{{ route('customer.product', ['slug' => $featuredProduct->slug]) }}" class="product-img"><img class="card-img-top"
                                         src="{{ $image }}" alt=""></a>
                                 <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
@@ -158,10 +158,10 @@
                                 <a class="h6 link" href="product.php">{{ $featuredProduct->title }}</a>
                                 <div class="price mt-2">
                                     <span
-                                        class="h5"><strong>{{ config('app.currency') . ' ' . $featuredProduct->price }}</strong></span>
+                                        class="h5"><strong>{{ $featuredProduct->formattedPrice() }}</strong></span>
                                     @if ($featuredProduct->compare_price > 0)
                                         <span
-                                            class="h6 text-underline"><del>{{ config('app.currency') . ' ' . $featuredProduct->compare_price }}</del></span>
+                                            class="h6 text-underline"><del>{{ $featuredProduct->formattedComparePrice() }}</del></span>
                                     @endif
 
                                 </div>
@@ -186,7 +186,7 @@
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
-                                <a href="" class="product-img"><img class="card-img-top"
+                                <a href="{{ route('customer.product', ['slug' => $latestProduct->slug]) }}" class="product-img"><img class="card-img-top"
                                         src="{{ $image }}" alt=""></a>
                                 <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
@@ -200,10 +200,10 @@
                                 <a class="h6 link" href="product.php">{{ $latestProduct->title }}</a>
                                 <div class="price mt-2">
                                     <span
-                                        class="h5"><strong>{{ config('app.currency') . ' ' . $latestProduct->price }}</strong></span>
+                                        class="h5"><strong>{{ $latestProduct->formattedPrice() }}</strong></span>
                                     @if ($latestProduct->compare_price > 0)
                                         <span
-                                            class="h6 text-underline"><del>{{ config('app.currency') . ' ' . $latestProduct->compare_price }}</del></span>
+                                            class="h6 text-underline"><del>{{ $latestProduct->formattedComparePrice() }}</del></span>
                                     @endif
 
                                 </div>
