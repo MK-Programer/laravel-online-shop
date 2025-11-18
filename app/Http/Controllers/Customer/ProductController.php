@@ -75,9 +75,9 @@ class ProductController extends Controller
             ->paginate(6);
     }
 
-    public function getProduct($slug)
+    public function getProduct($value, $column = 'slug')
     {
-        return Product::where('slug', $slug)
+        return Product::where($column, $value)
             ->where('status', 1)
             ->whereHas('images')
             ->with(['images'])
