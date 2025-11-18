@@ -93,3 +93,33 @@ function loadDropdown(triggerSelectorId, targetSelectorId, url, dataFunction, pr
     });
 }
 
+function initSelect2(selectId, ajaxParams = {}){
+    let config = {
+        minimumInputLength: ajaxParams.minimumInputLength ?? 3,
+        tags: ajaxParams.tags ?? true,
+        multiple: ajaxParams.multiple ?? true,
+        closeOnSelect: ajaxParams.closeOnSelect ?? false
+    };
+
+    if(ajaxParams.url){
+        config.ajax = {
+            url: ajaxParams.url,
+            dataType: 'json',
+            delay: 250,
+            processResults: ajaxParams.processResults ?? function (data) {
+                return {
+                    results: data.tags ?? data
+                };
+            }
+        };
+    }
+
+    const select = $('#' + selectId).select2(config);
+
+    select.on('select2:select', function () {
+        if (config.closeOnSelect === true) {
+            $(this).select2('close');
+        }
+    });
+}
+
