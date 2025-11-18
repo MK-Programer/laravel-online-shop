@@ -11,6 +11,10 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'related_products' => 'array'
+    ];
+
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = ucfirst($value);
@@ -29,6 +33,21 @@ class Product extends Model
     public function formattedComparePrice()
     {
         return config('app.currency') . $this->compare_price;
+    }
+
+    public function mapRelatedProducts($onlyWithImage = false, $includeImages = false, $allowedStatuses = [1, 0])
+    {
+        if(!is_array($allowedStatuses)) $allowedStatuses = [$allowedStatuses];
+
+        return Product::whereIn('id', $this->related_products ?? [])
+                ->when($onlyWithImage, function($query) {
+                    $query->whereHas('images');
+                })
+                ->when($includeImages, function($query) {
+                    $query->with('images');
+                })
+                ->whereIn('status', $allowedStatuses)
+                ->get();
     }
 
     public function category()
