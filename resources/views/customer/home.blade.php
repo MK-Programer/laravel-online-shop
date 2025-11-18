@@ -139,13 +139,13 @@
             <div class="row pb-3">
                 @foreach ($featuredProducts as $featuredProduct)
                     @php
-                        $image = $featuredProduct->images->first()->getSmallImage();
+                        $featuredProductImage = $featuredProduct->images->first()->getSmallImage();
                     @endphp
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
                                 <a href="{{ route('customer.product', ['slug' => $featuredProduct->slug]) }}" class="product-img"><img class="card-img-top"
-                                        src="{{ $image }}" alt=""></a>
+                                        src="{{ $featuredProductImage }}" alt=""></a>
                                 <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
                                 <div class="product-action">
@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-center mt-3">
-                                <a class="h6 link" href="product.php">{{ $featuredProduct->title }}</a>
+                                <a class="h6 link" href="{{ route('customer.product', ['slug' => $featuredProduct->slug]) }}">{{ $featuredProduct->title }}</a>
                                 <div class="price mt-2">
                                     <span
                                         class="h5"><strong>{{ $featuredProduct->formattedPrice() }}</strong></span>
@@ -181,13 +181,13 @@
             <div class="row pb-3">
                 @foreach ($latestProducts as $latestProduct)
                     @php
-                        $image = $latestProduct->images->first()->getSmallImage();
+                        $latestProductImage = $latestProduct->images->first()->getSmallImage();
                     @endphp
                     <div class="col-md-3">
                         <div class="card product-card">
                             <div class="product-image position-relative">
                                 <a href="{{ route('customer.product', ['slug' => $latestProduct->slug]) }}" class="product-img"><img class="card-img-top"
-                                        src="{{ $image }}" alt=""></a>
+                                        src="{{ $latestProductImage }}" alt=""></a>
                                 <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
                                 <div class="product-action">
@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-center mt-3">
-                                <a class="h6 link" href="product.php">{{ $latestProduct->title }}</a>
+                                <a class="h6 link" href="{{ route('customer.product', ['slug' => $latestProduct->slug]) }}">{{ $latestProduct->title }}</a>
                                 <div class="price mt-2">
                                     <span
                                         class="h5"><strong>{{ $latestProduct->formattedPrice() }}</strong></span>
