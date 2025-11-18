@@ -43,6 +43,8 @@
 
         <!-- Fav Icon -->
         <link rel="shortcut icon" type="image/x-icon" href="#" />
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
 
     <body data-instant-intensity="mousedown">
@@ -73,20 +75,7 @@
             const priceMax = "{{ config('app.price_max') }}";
         </script>
         <script src="{{ asset('customer/assets/js/custom.js') }}"></script>
-        <script>
-            window.onscroll = function() {myFunction()};
-
-            var navbar = document.getElementById("navbar");
-            var sticky = navbar.offsetTop;
-
-            function myFunction() {
-                if (window.pageYOffset >= sticky) {
-                    navbar.classList.add("sticky")
-                } else {
-                    navbar.classList.remove("sticky");
-                }
-            }
-        </script>
+        @include('customer.cart.cart-js')
         @yield('js')
     </body>
 </html>

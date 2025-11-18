@@ -10,10 +10,10 @@ use App\Http\Controllers\Admin\ProductController;
 
 use App\Http\Controllers\Admin\CategorySubCategoryController;
 use App\Http\Controllers\Admin\TempImagesController;
-
 use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\ShopController;
+use App\Http\Controllers\Customer\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +33,8 @@ use App\Http\Controllers\Customer\ShopController;
 Route::get('/', [CustomerHomeController::class, 'index'])->name('customer.home');
 Route::get('shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('customer.shop');
 Route::get('product/{slug}', [CustomerProductController::class, 'index'])->name('customer.product');
+Route::get('cart', [CartController::class, 'index'])->name('customer.cart');
+Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('customer.add-to-cart');
 
 Route::prefix('admin')->group(function(){
     Route::middleware('admin.guest')->group(function(){

@@ -1,13 +1,13 @@
-$(document).ready(function(){
-    var lazyLoadInstance = new LazyLoad({elements_selector:"img.lazy, video.lazy, div.lazy, section.lazy, header.lazy, footer.lazy,iframe.lazy"});
+$(document).ready(function () {
+    var lazyLoadInstance = new LazyLoad({ elements_selector: "img.lazy, video.lazy, div.lazy, section.lazy, header.lazy, footer.lazy,iframe.lazy" });
     let bannerHeight = $(window).height();
     $("#related-products").not('.slick-initialized').slick({
         centerMode: false,
         slidesToShow: 4,
         slidesToScroll: 1,
         arrows: true,
-        prevArrow:'<i class="icon-left-arrow right-arrow arrow"></i>',
-        nextArrow:'<i class="icon-right-arrow left-arrow arrow"></i>',
+        prevArrow: '<i class="icon-left-arrow right-arrow arrow"></i>',
+        nextArrow: '<i class="icon-right-arrow left-arrow arrow"></i>',
         responsive: [{
             breakpoint: 1200,
             settings: {
@@ -15,49 +15,49 @@ $(document).ready(function(){
                 centerPadding: '0px',
                 slidesToShow: 5,
                 slidesToScroll: 1,
-                
+
             }
-        },{
+        }, {
             breakpoint: 1300,
             settings: {
-                 centerMode: false,
+                centerMode: false,
                 slidesToShow: 3,
                 slidesToScroll: 1,
             }
-        },{
+        }, {
             breakpoint: 1200,
             settings: {
-                 centerMode: false,
+                centerMode: false,
                 slidesToShow: 3,
                 slidesToScroll: 1,
             }
-        },{
+        }, {
             breakpoint: 1024,
             settings: {
-                 centerMode: false,
+                centerMode: false,
                 slidesToShow: 2,
                 slidesToScroll: 1,
             }
-        },{
+        }, {
             breakpoint: 992,
             settings: {
-                 centerMode: false,
+                centerMode: false,
                 slidesToShow: 2,
                 slidesToScroll: 1,
             }
-        },{
+        }, {
             breakpoint: 576,
             settings: {
-                 centerMode: false,
+                centerMode: false,
                 slidesToShow: 1,
-                slidesToScroll: 1,      
+                slidesToScroll: 1,
             }
-        }] 
-    
+        }]
+
     });
 });
 
-$("#isShippingDiffernt").click(function(){
+$("#isShippingDiffernt").click(function () {
     if ($(this).is(':checked') == true) {
         $("#shippingForm").removeClass('d-none');
     } else {
@@ -65,6 +65,25 @@ $("#isShippingDiffernt").click(function(){
     }
 });
 
+// Adding csrf-token to any ajax request headers
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+window.onscroll = function () { myFunction() };
+
+var navbar = document.getElementById("navbar");
+var sticky = navbar.offsetTop;
+
+function myFunction() {
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+    } else {
+        navbar.classList.remove("sticky");
+    }
+}
 
 /**
  * Initialize reusable filters
@@ -81,7 +100,7 @@ function initFilters(options = {}) {
 
     // Initialize sliders
     if (options.sliderSelectorMap) {
-        $.each(options.sliderSelectorMap, function(paramName, selector) {
+        $.each(options.sliderSelectorMap, function (paramName, selector) {
 
             var slider = $(selector).ionRangeSlider({
                 type: 'double',
@@ -102,14 +121,14 @@ function initFilters(options = {}) {
 
     // Initialize checkboxes
     if (options.checkboxSelectorMap) {
-        $.each(options.checkboxSelectorMap, function(paramName, selector) {
+        $.each(options.checkboxSelectorMap, function (paramName, selector) {
             $(selector).change(applyFilters);
         });
     }
 
     // Initialize selects
     if (options.selectSelectorMap) {
-        $.each(options.selectSelectorMap, function(paramName, selector) {
+        $.each(options.selectSelectorMap, function (paramName, selector) {
             $(selector).change(applyFilters);
         });
     }
@@ -119,8 +138,8 @@ function initFilters(options = {}) {
         var query = [];
 
         // Checkbox values
-        $.each(options.checkboxSelectorMap || {}, function(paramName, selector) {
-            var values = $(selector + ':checked').map(function() {
+        $.each(options.checkboxSelectorMap || {}, function (paramName, selector) {
+            var values = $(selector + ':checked').map(function () {
                 return $(this).val();
             }).get();
 
@@ -128,13 +147,13 @@ function initFilters(options = {}) {
         });
 
         // Slider values
-        $.each(sliders, function(paramName, slider) {
+        $.each(sliders, function (paramName, slider) {
             query.push(paramName + '_min=' + slider.result.from);
             query.push(paramName + '_max=' + slider.result.to);
         });
 
         // Select values
-        $.each(options.selectSelectorMap || {}, function(paramName, selector) {
+        $.each(options.selectSelectorMap || {}, function (paramName, selector) {
             var value = $(selector).val();
             if (value) query.push(paramName + '=' + value);
         });
