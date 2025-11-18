@@ -88,7 +88,8 @@ class ProductController extends Controller
     {
         $product = $this->getProduct($slug);
         if(!$product) abort(404);
-
-        return view('customer.product', compact('product'));
+        
+        $relatedProducts = $product->mapRelatedProducts(1, true, true);
+        return view('customer.product', compact('product', 'relatedProducts'));
     }
 }
