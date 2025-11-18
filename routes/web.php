@@ -82,6 +82,7 @@ Route::prefix('admin')->group(function(){
             Route::get('{record}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
             Route::put('{record}/update', [ProductController::class, 'update'])->name('admin.products.update');
             Route::delete('{record}/delete', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+            Route::get('search-products', [ProductController::class, 'searchProducts'])->name('admin.products.search-products');
         }); 
 
         //* Category Subcategory Routes

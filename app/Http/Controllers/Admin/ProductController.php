@@ -59,6 +59,7 @@ class ProductController extends Controller
         $product->short_description = $request->short_description;
         $product->description = $request->description;
         $product->shipping_returns = $request->shipping_returns;
+        $product->related_products = !empty($request->related_products) ? $request->related_products : null;
         $product->price = $request->price;
         $product->compare_price = $request->compare_price;
         $product->category_id = $request->category;
@@ -99,11 +100,12 @@ class ProductController extends Controller
                 ->route('admin.products.index')
                 ->with('error', 'Record not found.');
         }
-        
+
+        $relatedProducts = $product->mapRelatedProducts();
         $subCategories = SubCategory::where('category_id', $product->category_id)->pluck('name', 'id');
         $categories = Category::getNameIdPairs();
         $brands = Brand::getNameIdPairs();
-        return view('admin.products.edit', compact('product', 'categories', 'subCategories', 'brands'));
+        return view('admin.products.edit', compact('product', 'relatedProducts', 'categories', 'subCategories', 'brands'));
     }
 
     public function update($record, ProductRequest $request)
@@ -126,5 +128,19 @@ class ProductController extends Controller
         return redirect()
             ->route('admin.products.index')
             ->with('success', 'Record deleted successfully.');
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $products = [];
+        if($request->filled('term'))
+        {
+            $products = Product::select('id', 'title as text')
+                            ->where('title', 'LIKE', '%' . $request->term . '%')
+                            ->orWhere('sku', 'LIKE', 'SKU-' . '%' . $request->term . '%')
+                            ->get();
+        }
+        
+        return response()->json(['tags' => $products]);
     }
 }

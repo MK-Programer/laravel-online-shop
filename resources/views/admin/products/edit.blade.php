@@ -140,6 +140,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Related products</h2>
+                                <div class="mb-3">
+                                    <select name="related_products[]" id="related_products" class="w-100" multiple>
+                                        @foreach ($relatedProducts as $relatedProduct)
+                                            <option value="{{ $relatedProduct->id }}" selected>{{ $relatedProduct->title  }}</option>                                            
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3">
@@ -226,6 +238,13 @@
             '{{ route("admin.category-sub-categories.index") }}',
             function(value){ return {category_id: value}; },
             function(response){ return response.sub_categories }
+        );
+    
+        initSelect2(
+            'related_products',
+            {
+                url: '{{ route("admin.products.search-products") }}'
+            }
         );
     </script>
 @endsection
