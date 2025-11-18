@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'shipping_returns' => 'nullable|string',
-            'related_products' => 'nullable|string',
+            'related_products' => 'nullable|array',
             'price' => 'required|numeric',
             'compare_price' => 'numeric|nullable',
             'category' => 'required|integer',
