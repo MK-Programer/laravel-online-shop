@@ -53,9 +53,9 @@
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset('admin/assets/js/demo.js') }}"></script>
         <!--- Global helper --->
-        <script src="{{ asset('admin/assets/js/global-helper.js') }}"></script>
+        <script src="{{ asset('assets/js/global-helper.js') }}"></script>
         <!--- Form helper --->
-        <script src="{{ asset('admin/assets/js/form-helper.js') }}"></script>
+        <script src="{{ asset('assets/js/form-helper.js') }}"></script>
         <!--- Image helper --->
         <script>
             const tempImageUploadUrl = "{{ route('admin.temp-image-upload') }}";
@@ -66,7 +66,7 @@
         <!--- Summernote JS --->
         <script src="{{ asset('admin/assets/plugins/summernote/summernote.min.js') }}"></script>
         <!--- Custom Alerts --->
-        <script src="{{ asset('admin/assets/js/alerts.js') }}"></script>
+        <script src="{{ asset('assets/js/alerts.js') }}"></script>
         <!-- Select2 JS -->
         <script src="{{ asset('admin/assets/plugins/select2/js/select2.min.js') }}"></script>
         <!--- Custom JS --->

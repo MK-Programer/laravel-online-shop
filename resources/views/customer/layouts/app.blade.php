@@ -63,12 +63,17 @@
 
         <script src="{{ asset('customer/assets/js/jquery-3.6.0.min.js') }}"></script>
         <script src="{{ asset('customer/assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
+
         <script src="{{ asset('customer/assets/js/instantpages.5.1.0.min.js') }}"></script>
         <script src="{{ asset('customer/assets/js/lazyload.17.6.0.min.js') }}"></script>
         <script src="{{ asset('customer/assets/js/slick.min.js') }}"></script>
         <script src="{{ asset('customer/assets/js/ion.rangeSlider.min.js') }}"></script>
-        {{-- Loading Manager Js --}}
-        <script src="{{ asset('customer/assets/js/loading-manager.js') }}"></script>
+        <!--- Global helper --->
+        <script src="{{ asset('assets/js/global-helper.js') }}"></script>
+        <!--- Form helper --->
+        <script src="{{ asset('assets/js/form-helper.js') }}"></script>
+        <!--- Custom Alerts --->
+        <script src="{{ asset('assets/js/alerts.js') }}"></script>
         <script>
             const currency = "{{ config('app.currency') }}";
             const priceMin = "{{ config('app.price_min') }}";
