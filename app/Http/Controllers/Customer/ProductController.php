@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     private $featuredProductsHomeLimit = 8,
-        $latestProductsHomeLimit = 8,
-        $priceRangesSteps = 4;
+        $latestProductsHomeLimit = 8;
 
 
     public function getHomeFeaturedProducts()
