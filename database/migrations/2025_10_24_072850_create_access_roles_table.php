@@ -23,19 +23,19 @@ return new class extends Migration
         DB::table('access_roles')
             ->insert([
                 [
+                    'name' => 'Customer',
+                    'slug' => 'customer',
+                    'description' => 'A customer is a user who visits the online shop to browse products, add items to the cart, and make purchases. They can also create an account to manage orders, track deliveries, and receive updates or offers.',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
                     'name' => 'Admin',
                     'slug' => 'admin',
                     'description' => 'User with administrative privileges to manage content and users.',
                     'created_at' => now(),
                     'updated_at' => now(),
-                ],
-                [
-                    'name' => 'User',
-                    'slug' => 'user',
-                    'description' => 'Regular user with limited access to system features.',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
+                ],  
             ]);
     }
 
