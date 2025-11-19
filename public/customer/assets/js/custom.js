@@ -161,3 +161,22 @@ function initFilters(options = {}) {
         window.location.href = url + (query.length ? '?' + query.join('&') : '');
     }
 }
+
+function addToCart(id) {
+    $.ajax({
+        url: addToCartRoute,
+        type: 'post',
+        data: { id: id },
+        dataType: 'json',
+        success: function (response) {
+            console.log(response);
+            // alert(response.message);
+            window.location.href = cartRoute;
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr);
+            const message = xhr.responseJSON?.message || error;
+            alert(message);
+        }
+    });
+}

@@ -35,6 +35,8 @@ Route::get('shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'i
 Route::get('product/{slug}', [CustomerProductController::class, 'index'])->name('customer.product');
 Route::get('cart', [CartController::class, 'index'])->name('customer.cart');
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('customer.add-to-cart');
+Route::post('update-cart', [CartController::class, 'updateCart'])->name('customer.update-cart');
+Route::post('delete-cart-item', [CartController::class, 'deleteItem'])->name('customer.delete-cart-item');
 
 Route::prefix('admin')->group(function(){
     Route::middleware('admin.guest')->group(function(){

@@ -73,9 +73,10 @@
             const currency = "{{ config('app.currency') }}";
             const priceMin = "{{ config('app.price_min') }}";
             const priceMax = "{{ config('app.price_max') }}";
+            const addToCartRoute = "{{ route('customer.add-to-cart') }}";
+            const cartRoute = "{{ route('customer.cart') }}";
         </script>
         <script src="{{ asset('customer/assets/js/custom.js') }}"></script>
-        @include('customer.cart.cart-js')
         @yield('js')
     </body>
 </html>

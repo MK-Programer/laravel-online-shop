@@ -30,7 +30,7 @@ class CartController extends Controller
         else //* add
         {
             # Cart::add(); id, name, qty, price, options, tax-rate
-            Cart::add($product->id, $product->title, 1, $product->price, ['image' => $product->images->first()->getSmallImage()], 14);
+            Cart::add($product->id, $product->title, 1, $product->price, ['image' => $product->images->first()->getSmallImage()]);
             $code = 200;
             $message = $product->title . ' added to cart.';
         }
@@ -50,10 +50,56 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::content();
-        return view('customer.cart.index', compact('cart'));
+        return view('customer.cart', compact('cart'));
     }
 
-    
+    public function updateCart(Request $request)
+    {
+        $code = 200;
+        $message = 'Cart updated successfuly.';
 
-    
+        $rowId = $request->rowId;
+        $qty = $request->qty;
+
+        $item = Cart::get($rowId);
+        $product = $this->productController->getProduct($item->id, 'id');
+        //* check qty available in stock
+        if($product->track_qty == 'Yes')
+        {
+            if($product->qty < $qty)
+            {
+                $code = 422;
+                $message = 'Requested quantity (' . $qty . ') exceeds available stock (' . $product->qty . ').';
+            }
+            else
+            {    
+                Cart::update($rowId, $qty);
+            }
+        } 
+        else
+        {    
+            Cart::update($rowId, $qty);
+        }
+        return response()->json(['message' => $message], $code);
+    } 
+
+    public function deleteItem(Request $request)
+    {
+        $rowId = $request->rowId;
+
+        $item = Cart::get($rowId);
+        if(!$item)
+        {
+            $code = 422;
+            $message = 'Item not found in cart.';
+        }
+        else
+        {
+            $code = 200;
+            $message = 'Item removed successfully.';
+            Cart::remove($rowId);
+        }
+
+        return response()->json(['message' => $message], $code);
+    }
 }
