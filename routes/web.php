@@ -15,6 +15,9 @@ use App\Http\Controllers\Customer\ProductController as CustomerProductController
 use App\Http\Controllers\Customer\ShopController;
 use App\Http\Controllers\Customer\CartController;
 
+use App\Http\Controllers\Customer\Auth\RegisterController;
+use App\Http\Controllers\Customer\Auth\LoginController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,6 +40,21 @@ Route::get('cart', [CartController::class, 'index'])->name('customer.cart');
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('customer.add-to-cart');
 Route::post('update-cart', [CartController::class, 'updateCart'])->name('customer.update-cart');
 Route::post('delete-cart-item', [CartController::class, 'deleteItem'])->name('customer.delete-cart-item');
+
+
+
+Route::prefix('account')->group(function(){
+    Route::middleware('guest')->group(function(){
+        Route::get('register', [RegisterController::class, 'index'])->name('customer.register');
+        Route::post('process-register', [RegisterController::class, 'processRegister'])->name('customer.process-register');
+
+        Route::get('login', [LoginController::class, 'index'])->name('customer.login');
+    });
+
+    Route::middleware('auth')->group(function(){
+    
+    });
+});
 
 Route::prefix('admin')->group(function(){
     Route::middleware('admin.guest')->group(function(){
