@@ -3,7 +3,9 @@ function resetForm(formId) {
     const form = $('#' + formId);
     if (form.length) {
         form[0].reset();
-        $('.summernote').summernote('code', '');
+        if ($('.summernote').length) {
+            $('.summernote').summernote('code', '');
+        }
 
         // Remove Dropzone files *only* in this form
         form.find('.dropzone').each(function (index, element) {
@@ -70,7 +72,7 @@ function hideValidationErrors(formId) {
         });
 }
 
-function submitFormUsingAjax(formId, resetFormOnSuccess = true) {
+function submitFormUsingAjax(formId, resetFormOnSuccess = true, onSuccess = null) {
     $('#'+formId).submit(function (event) {
         event.preventDefault();
 
@@ -85,10 +87,14 @@ function submitFormUsingAjax(formId, resetFormOnSuccess = true) {
             },
             success: function (response) {
                 if(resetFormOnSuccess) resetForm(formId);
-                showSuccess(response.message);
+                if(typeof onSuccess === 'function'){
+                    onSuccess(response);
+                }else{
+                    showSuccess(response.message);
+                }
             },
             error: function (xhr, status, error) {
-                console.log(xhr);
+                console.error(xhr);
                 if (xhr.status == 422) {
                     showValidationErrors(xhr.responseJSON.errors);
                 } else {
