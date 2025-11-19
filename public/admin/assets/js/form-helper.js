@@ -92,7 +92,7 @@ function submitFormUsingAjax(formId, resetFormOnSuccess = true) {
                 if (xhr.status == 422) {
                     showValidationErrors(xhr.responseJSON.errors);
                 } else {
-                    const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
+                    const message = xhr.responseJSON?.error || error;
                     showError(message);
                 }
             },

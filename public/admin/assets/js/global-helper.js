@@ -86,7 +86,7 @@ function loadDropdown(triggerSelectorId, targetSelectorId, url, dataFunction, pr
                 });
             },
             error: function (xhr, status, error) {
-                const message = xhr.responseJSON?.error || 'An unexpected error occurred.';
+                const message = xhr.responseJSON?.error || error;
                 showError(message);
             }
         });
