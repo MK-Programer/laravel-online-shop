@@ -39,7 +39,7 @@
                     </div>
                     <button type="submit" class="btn btn-dark btn-block btn-lg" value="Register">Register</button>
                 </form>
-                <div class="text-center small">Already have an account? <a href="login.php">Login Now</a></div>
+                <div class="text-center small">Already have an account? <a href="{{ route('customer.login') }}">Login Now</a></div>
             </div>
         </div>
     </section>
