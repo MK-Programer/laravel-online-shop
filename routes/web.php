@@ -17,6 +17,8 @@ use App\Http\Controllers\Customer\CartController;
 
 use App\Http\Controllers\Customer\Auth\RegisterController;
 use App\Http\Controllers\Customer\Auth\LoginController;
+use App\Http\Controllers\Customer\Auth\LogoutController;
+use App\Http\Controllers\Customer\Auth\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,10 +51,12 @@ Route::prefix('account')->group(function(){
         Route::post('process-register', [RegisterController::class, 'processRegister'])->name('customer.process-register');
 
         Route::get('login', [LoginController::class, 'index'])->name('customer.login');
+        Route::post('authenticate', [LoginController::class, 'authenticate'])->name('customer.authenticate');
     });
 
     Route::middleware('auth')->group(function(){
-    
+        Route::get('profile', [ProfileController::class, 'index'])->name('customer.profile');
+        Route::get('logout', [LogoutController::class, 'index'])->name('customer.logout');
     });
 });
 
