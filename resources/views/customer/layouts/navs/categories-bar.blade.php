@@ -1,7 +1,7 @@
 <header class="bg-dark">
     <div class="container">
         <nav class="navbar navbar-expand-xl" id="navbar">
-            <a href="index.php" class="text-decoration-none mobile-logo">
+            <a href="{{ route('customer.home') }}" class="text-decoration-none mobile-logo">
                 <span class="h2 text-uppercase text-primary bg-dark">Online</span>
                 <span class="h2 text-uppercase text-white px-2">SHOP</span>
             </a>
