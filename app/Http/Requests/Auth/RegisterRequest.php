@@ -25,6 +25,7 @@ class RegisterRequest extends FormRequest
          * (?=.*[A-Za-z]) → must contain at least one letter
          * (?=.*\d) → must contain at least one number
          * (?=.*[@$!%*#?&]) → must contain at least one special character
+         * country code for phone validation can be fetched from countries table
          */
         return [
             'name' => 'required|min:3',
