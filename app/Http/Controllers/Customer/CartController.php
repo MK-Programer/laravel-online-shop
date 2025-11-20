@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -101,5 +103,27 @@ class CartController extends Controller
         }
 
         return response()->json(['message' => $message], $code);
+    }
+
+    public function checkout()
+    {
+        // if cart is empty redirect to cart page
+        if(Cart::count() == 0) 
+            return redirect()
+                ->route('customer.cart');
+        
+        // if user is not logged in redirect to login page
+        if(Auth::check() == false)
+        {
+            // authenticate first then move to checkout page
+            session()->put('url.intended', route('customer.checkout'));
+            return redirect()
+                ->route('customer.login');
+        } 
+
+        $countries = Country::orderBy('name')->get();
+
+        session()->forget('url.intended');
+        return view('customer.checkout', compact('countries'));
     }
 }

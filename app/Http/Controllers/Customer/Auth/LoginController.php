@@ -12,6 +12,7 @@ class LoginController extends Controller
 {
     public function index()
     {
+        // session()->remove('url.intended');
         return view('customer.auth.login');
     }
 
@@ -21,6 +22,9 @@ class LoginController extends Controller
         {
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember))
             {
+                if(session()->has('url.intended'))
+                    return redirect(session()->get('url.intended'));
+
                 return redirect()
                     ->route('customer.profile');
             }
