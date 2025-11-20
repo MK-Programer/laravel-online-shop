@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class AdminLoginController extends Controller
 {
@@ -14,17 +15,9 @@ class AdminLoginController extends Controller
         return view('admin.auth.login');
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(LoginRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'email' => 'required|email',
-                'password' => 'required',
-            ],
-        );
-
-        if($validator->passes())
+        try
         {
             if(Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')))
             {
@@ -46,14 +39,16 @@ class AdminLoginController extends Controller
             {
                 return redirect()
                     ->route('admin.login')
-                    ->with('error', 'Either Email/Password is incorrect.');
+                    ->with('error', 'Either Email/Password is incorrect.')
+                    ->withInput($request->only('email'));
             }
+            
         }
-        else
+        catch(ValidationException $e)
         {
             return redirect()
                 ->route('admin.login')
-                ->withErrors($validator)
+                ->withErrors($e->errors())
                 ->withInput($request->only('email'));
         }
     }
