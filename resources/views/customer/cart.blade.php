@@ -84,14 +84,14 @@
                                 </div>
                                 <div class="d-flex justify-content-between pb-2">
                                     <div>Shipping</div>
-                                    <div>{{ config('app.currency') . '0' }}</div>
+                                    <div>{{ config('app.currency') . config('app.shipping_amount') }}</div>
                                 </div>
                                 <div class="d-flex justify-content-between summery-end">
                                     <div>Total</div>
-                                    <div>{{ config('app.currency') . Cart::total() }}</div>
+                                    <div>{{ config('app.currency') . (Cart::total() + config('app.shipping_amount')) }}</div>
                                 </div>
                                 <div class="pt-5">
-                                    <a href="login.php" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
+                                    <a href="{{ route('customer.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
                                 </div>
                             </div>
                         </div>
