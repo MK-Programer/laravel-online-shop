@@ -57,7 +57,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {{ config('app.currency') . $item->qty * $item->price  }}
+                                                {{ config('app.currency') . number_format($item->qty * $item->price) }}
                                             </td>
                                             <td>
                                                 <button class="btn btn-sm btn-danger" onclick="deleteItem('{{ $item->rowId }}');"><i class="fa fa-times"></i></button>
@@ -76,11 +76,11 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between pb-2">
                                     <div>Subtotal</div>
-                                    <div>{{ config('app.currency') . Cart::subtotal() }}</div>
+                                    <div>{{ config('app.currency') . number_format(Cart::subtotal()) }}</div>
                                 </div>
                                 <div class="d-flex justify-content-between pb-2">
-                                    <div>Tax%</div>
-                                    <div>{{ config('cart.tax') . '%' }}</div>
+                                    <div>Tax</div>
+                                    <div>{{ '(' . config('cart.tax') . '%)' . config('app.currency') . number_format(Cart::tax())  }}</div>
                                 </div>
                                 <div class="d-flex justify-content-between pb-2">
                                     <div>Shipping</div>
@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between summery-end">
                                     <div>Total</div>
-                                    <div>{{ config('app.currency') . (Cart::total() + config('app.shipping_amount')) }}</div>
+                                    <div>{{ config('app.currency') . number_format(Cart::total() + config('app.shipping_amount')) }}</div>
                                 </div>
                                 <div class="pt-5">
                                     <a href="{{ route('customer.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
