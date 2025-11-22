@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\Country;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -27,10 +28,11 @@ class RegisterRequest extends FormRequest
          * (?=.*[@$!%*#?&]) → must contain at least one special character
          * country code for phone validation can be fetched from countries table
          */
+        $phoneCodesStr = implode(',', Country::pluck('code')->toArray());
         return [
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users',
-            'phone' => 'nullable|phone:US,EG|unique:users',
+            'phone' => 'nullable|phone:' . $phoneCodesStr . '|unique:users',
             'password' => 'required|min:5|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).+$/|confirmed'
         ];
     }
@@ -38,7 +40,7 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'phone.phone' => 'Please enter a valid phone number (US or Egypt).',
+            'phone.phone' => 'Please enter a valid phone number.',
             'password.regex' => 'Password must contain letters, numbers, and special characters.',
         ];
     }
