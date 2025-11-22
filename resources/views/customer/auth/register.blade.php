@@ -15,7 +15,6 @@
     <section class="section-10">
         <div class="container">
             <div class="login-form">
-                <div class="container-fluid"></div>
                 <form action="{{ route('customer.process-register') }}" method="post" name="registration_form" id="registration_form">
                     <h4 class="modal-title">Register Now</h4>
                     <div class="form-group">
