@@ -19,6 +19,7 @@ use App\Http\Controllers\Customer\Auth\RegisterController;
 use App\Http\Controllers\Customer\Auth\LoginController;
 use App\Http\Controllers\Customer\Auth\LogoutController;
 use App\Http\Controllers\Customer\Auth\ProfileController;
+use App\Http\Controllers\Customer\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,8 +43,12 @@ Route::get('cart', [CartController::class, 'index'])->name('customer.cart');
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('customer.add-to-cart');
 Route::post('update-cart', [CartController::class, 'updateCart'])->name('customer.update-cart');
 Route::post('delete-cart-item', [CartController::class, 'deleteItem'])->name('customer.delete-cart-item');
-Route::get('checkout', [CartController::class, 'checkout'])->name('customer.checkout');
 
+Route::get('checkout', [CheckoutController::class, 'index'])->name('customer.checkout');
+Route::middleware('auth')->group(function(){
+    Route::post('process-checkout', [CheckoutController::class, 'checkout'])->name('customer.process-checkout');
+    Route::get('thanks/{record}', [CheckoutController::class, 'thanks'])->name('customer.thanks');
+});
 
 Route::prefix('account')->group(function(){
     Route::middleware('guest')->group(function(){
